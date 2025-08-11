@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeni Sekme</title>
+    <!-- CSS dosyamızı bağlıyoruz -->
+    <script src="Sortable.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Arka plan resmi üzerine gelen karartma katmanı -->
+    <div id="background-overlay"></div>
+
+    <!-- Saat burada görünecek -->
+    <div id="clock"></div>
+    <!-- Hava durumu burada görünecek -->
+    <div id="weather-container"></div>
+
+    <main>
+        <!-- Selamlama mesajı -->
+        <h1 id="greeting"></h1>
+
+        <!-- Arama Bölümü -->
+        <div id="search-container">
+            <form id="search-form">
+                <input type="text" id="search-input" placeholder="Arama yap..." autocomplete="off" autofocus>
+                <button type="submit">Ara</button>
+            </form>
+            <div id="autocomplete-suggestions"></div>
+        </div>
+
+        <!-- Hızlı Bağlantılar -->
+        <div class="quick-links" id="quick-links-container">
+            <!-- Bağlantılar ve Ekle butonu JavaScript ile buraya eklenecek -->
+        </div>
+
+        <!-- Yeni Bağlantı Ekleme Modalı (Gizli) -->
+        <div id="add-link-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h2>Yeni Hızlı Bağlantı</h2>
+                <form id="add-link-form">
+                    <input type="text" id="link-name-input" placeholder="Site Adı (isteğe bağlı)" autocomplete="off">
+                    <input type="text" id="link-url-input" placeholder="URL (örn: youtube.com)" required autocomplete="off">
+                    <button type="submit">Kaydet</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Ayarlar Butonu -->
+    <button id="settings-btn" title="Ayarlar">⚙️</button>
+
+    <!-- Ayarlar Paneli (Gizli) -->
+    <div id="settings-panel" class="panel">
+        <div class="panel-header">
+            <h2>Ayarlar</h2>
+            <span id="close-settings-btn" class="close-btn">&times;</span>
+        </div>
+        <div class="panel-content">
+            <form id="location-form" class="settings-form">
+                <label for="country-select">Ülke</label>
+                <select id="country-select"></select>
+                <label for="location-input">Şehir / İlçe</label>
+                <input type="text" id="location-input" placeholder="örn: Ankara veya Çankaya">
+                <small>Hava durumu için konum girmeniz gereklidir.</small>
+                <button type="submit">Kaydet</button>
+            </form>
+
+            <hr class="settings-divider">
+
+            <div class="settings-form">
+                <label for="search-engine-select">Arama Motoru</label>
+                <select id="search-engine-select"></select>
+            </div>
+
+            <hr class="settings-divider">
+
+            <div class="settings-form">
+                <label for="user-name-input">İsminiz</label>
+                <input type="text" id="user-name-input" placeholder="Selamlama için isminizi girin...">
+            </div>
+
+            <hr class="settings-divider">
+
+            <form id="background-form" class="settings-form">
+                <label for="background-source-select">Arka Plan Kaynağı</label>
+                <select id="background-source-select">
+                    <option value="none">Varsayılan Renk</option>
+                    <option value="url">URL</option>
+                    <option value="bing">Bing Günün Resmi</option>
+                    <option value="custom">Kendi Resimlerim</option>
+                </select>
+
+                <div id="background-url-group" class="hidden">
+                    <label for="background-url-input">Resim URL'si</label>
+                    <input type="text" id="background-url-input" placeholder="https://.../image.jpg">
+                </div>
+
+                <div id="background-custom-group" class="hidden">
+                    <label for="background-custom-input" class="custom-file-upload">
+                        Resim Seç...
+                    </label>
+                    <input type="file" id="background-custom-input" multiple accept="image/*">
+                    <div id="custom-images-preview"></div>
+                    <button type="button" id="clear-custom-images-btn">Tümünü Temizle</button>
+                </div>
+
+                <button type="submit">Kaydet</button>
+            </form>
+
+            <hr class="settings-divider">
+
+            <button id="reset-all-settings-btn" class="danger-btn">Tüm Ayarları Sıfırla</button>
+        </div>
+    </div>
+
+    <!-- Detaylı Hava Durumu Modalı (Gizli) -->
+    <div id="weather-modal" class="modal">
+        <div class="modal-content">
+            <div class="panel-header">
+                <h2 id="weather-modal-city">Hava Durumu Tahmini</h2>
+                <span id="close-weather-modal-btn" class="close-btn">&times;</span>
+            </div>
+            <div id="weather-forecast-details">
+                <!-- Detaylı tahmin buraya gelecek -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Klasör Görünümü Modalı (Gizli) -->
+    <div id="folder-view-modal" class="modal">
+        <div class="modal-content">
+            <div class="panel-header">
+                <input type="text" id="folder-name-input" class="folder-name-input" placeholder="Klasör Adı">
+                <span id="close-folder-view-btn" class="close-btn">&times;</span>
+            </div>
+            <div class="quick-links" id="folder-links-container">
+                <!-- Klasör içindeki bağlantılar buraya gelecek -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript dosyamızı bağlıyoruz (body'nin sonunda olması daha iyidir) -->
+    <script src="script.js"></script>
+</body>
+</html>

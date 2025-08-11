@@ -1,0 +1,682 @@
+/* Genel sayfa ayarları */
+body {
+    background-color: #121212; /* Koyu arka plan */
+    color: #e0e0e0; /* Açık renk yazı */
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Sayfayı tam ekran kapla */
+    text-align: center;
+    overflow-x: hidden; /* Yatay scrollbar'ı engelle */
+}
+
+/* Arka plan karartma katmanı */
+#background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.35); /* Siyah, %35 opaklık */
+    z-index: -1; /* İçeriğin arkasına gönder */
+}
+
+main {
+    max-width: 600px;
+    padding: 40px;
+}
+
+/* Saat stili */
+#clock {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-size: 7.5rem;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #ffffff; /* Rengi biraz daha soluk yaptık */
+    line-height: 1; /* Saat altındaki boşluğu azaltır */
+    text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Hava durumu stili */
+#weather-container {
+    position: absolute;
+    /* Bu değeri değiştirerek saat ile arasındaki dikey boşluğu ayarlayabilirsiniz. */
+    top: 167px; 
+    left: 30px;
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    color: #aaa;
+    gap: 8px; /* İkon ve yazı arası boşluk */
+    text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+#weather-container:hover {
+    color: #fff;
+}
+
+.weather-city {
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+h1 {
+    font-size: 2.5rem; /* 40px */
+    font-weight: 300;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Arama Bölümü */
+#search-container {
+    position: relative;
+    max-width: 584px; /* Google'ın arama çubuğu genişliği */
+    margin: 0 auto 2.5rem auto;
+}
+
+/* Arama çubuğu stili */
+#search-form {
+    display: flex;
+}
+
+#search-input {
+    width: 80%;
+    padding: 12px 20px;
+    border: 1px solid #333;
+    border-radius: 24px 0 0 24px; /* Sol kenarları yuvarlat */
+    background-color: #222;
+    color: #e0e0e0;
+    font-size: 1rem;
+    outline: none; /* Tıklama çerçevesini kaldır */
+}
+
+#search-form button {
+    padding: 12px 20px;
+    border: 1px solid #333;
+    border-left: none;
+    border-radius: 0 24px 24px 0; /* Sağ kenarları yuvarlat */
+    background-color: #333;
+    color: #e0e0e0;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+#search-form button:hover {
+    background-color: #444;
+}
+
+/* Otomatik Tamamlama Stilleri */
+#autocomplete-suggestions {
+    display: none; /* Başlangıçta gizli */
+    position: absolute;
+    top: 100%; /* Formun hemen altında */
+    left: 0;
+    right: 0;
+    background-color: #222;
+    border: 1px solid #333;
+    border-top: none;
+    border-radius: 0 0 24px 24px;
+    z-index: 98;
+    text-align: left;
+    overflow: hidden;
+}
+
+.suggestion-item {
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #e0e0e0;
+    font-size: 0.9rem;
+}
+
+.suggestion-item:hover,
+.suggestion-item.active {
+    background-color: #333;
+}
+
+/* Hızlı bağlantılar stili */
+.quick-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Birden fazla satıra yayılabilmesi için */
+    gap: 15px; /* Kutular arası boşluk */
+}
+
+.link-box-wrapper {
+    position: relative;
+}
+
+.link-box {
+    background-color: #222;
+    color: #e0e0e0;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background-color 0.2s, transform 0.2s;    
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 130px;
+    height: 50px; /* Sabit yükseklik */
+    box-sizing: border-box; /* Padding ve border'ı genişliğe dahil et */
+    overflow: hidden; /* İçeriğin taşmasını engelle */
+}
+
+.favicon-img {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0; /* İkonun küçülmesini engelle */
+}
+
+.link-box span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.link-box:hover {
+    background-color: #333;
+    transform: translateY(-3px); /* Hafif yukarı kalkma efekti */
+}
+
+.link-box.link-loading {
+    transform: translateY(-3px); /* Hover ile aynı hizada kalsın */
+    animation: pulse-border 1.2s infinite;
+}
+
+@keyframes pulse-border {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 0 10px rgba(0, 123, 255, 0);
+    }
+}
+
+.delete-link-btn {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+    opacity: 0; /* Normalde görünmez */
+    transition: opacity 0.2s, transform 0.2s;
+    transform: scale(0.8);
+}
+
+.link-box-wrapper.drop-target .link-box {
+    /* transform: scale(1.1); */ /* Kaldırıldı: Bu animasyon sürükleme sırasında kararsızlığa neden oluyordu. */
+    background-color: #007bff;
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.7);
+}
+
+.link-box-wrapper:hover .delete-link-btn {
+    opacity: 1; /* Üzerine gelince görünür yap */
+    transform: scale(1);
+}
+
+.add-link-box {
+    border: 2px dashed #444;
+    cursor: pointer;
+    font-size: 2rem;
+    color: #444;
+}
+
+.add-link-box:hover {
+    background-color: #2a2a2a;
+    color: #666;
+}
+
+/* Klasör Kutusu Stilleri */
+.folder-box {
+    display: grid;
+    gap: 4px;
+    padding: 7px;
+    justify-content: center;
+    align-content: center;
+    cursor: pointer;
+}
+
+.folder-preview-icon {
+    border-radius: 3px;
+    object-fit: contain;
+    background-color: rgba(255, 255, 255, 0.05); /* İkon yüklenmezse yer tutucu */
+    transition: transform 0.2s ease;
+}
+
+/* 1 öğe: Ortada büyük ikon */
+.folder-box[data-item-count="1"] {
+    align-items: center;
+    justify-items: center;
+}
+.folder-box[data-item-count="1"] .folder-preview-icon {
+    width: 32px;
+    height: 32px;
+}
+
+/* 2 öğe: Yan yana */
+.folder-box[data-item-count="2"] {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+}
+.folder-box[data-item-count="2"] .folder-preview-icon {
+    width: 24px;
+    height: 24px;
+    justify-self: center;
+}
+
+/* 3 öğe: 1 üstte, 2 altta */
+.folder-box[data-item-count="3"] {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+.folder-box[data-item-count="3"] .folder-preview-icon {
+    width: 20px;
+    height: 20px;
+}
+.folder-box[data-item-count="3"] .folder-preview-icon:first-child {
+    grid-column: 1 / -1; /* İlk öğeyi tam genişlik yap */
+    justify-self: center;
+}
+
+/* 4 öğe: 2x2 grid */
+.folder-box[data-item-count="4"] {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+.folder-box[data-item-count="4"] .folder-preview-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.folder-name-input {
+    background: transparent;
+    border: none;
+    color: #e0e0e0;
+    font-size: 1.5rem;
+    font-weight: 400;
+    width: calc(100% - 30px);
+    outline: none;
+}
+
+/* Modal Stilleri */
+.modal {
+    position: fixed;
+    z-index: 101; /* Ayarlar panelinin üzerinde olmalı */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6); /* Yarı saydam siyah arka plan */
+
+    /* Flexbox ile ortalamak için */
+    display: none; /* Varsayılan olarak gizli, is-open ile açılacak */
+    justify-content: center;
+    align-items: center;
+    padding: 20px; /* Küçük ekranlarda kenar boşluğu */
+    box-sizing: border-box;
+}
+
+.modal.is-open {
+    display: flex;
+}
+
+.modal-content {
+    background-color: #222;
+    padding: 20px;
+    border: 1px solid #444;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+    position: relative;
+    flex-shrink: 0; /* İçeriğin küçülmesini engelle */
+}
+
+.close-btn {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #fff;
+}
+
+.modal-content form input, .modal-content form button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: #e0e0e0;
+    font-size: 1rem;
+}
+
+.modal-content form button {
+    background-color: #007bff;
+    cursor: pointer;
+}
+
+.modal-content form button:hover {
+    background-color: #0056b3;
+}
+
+/* Ayarlar Butonu */
+#settings-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(40, 40, 40, 0.8);
+    color: #aaa;
+    border: 1px solid #444;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s, color 0.2s;
+    z-index: 99;
+}
+
+#settings-btn:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+/* Ayarlar Paneli */
+.panel {
+    position: fixed;
+    top: 0;
+    right: -320px; /* Başlangıçta ekranın dışında */
+    width: 300px;
+    height: 100%;
+    background-color: #1e1e1e;
+    box-shadow: -2px 0 15px rgba(0,0,0,0.5);
+    transition: right 0.3s ease-in-out;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.panel.open {
+    right: 0; /* Açık olduğunda pozisyonu */
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.panel-header h2 {
+    margin: 0;
+    font-weight: 400;
+    font-size: 1.5rem;
+}
+
+.panel-content {
+    text-align: left;
+    overflow-y: auto; /* Gerektiğinde dikey kaydırma çubuğu ekle */
+    flex: 1; /* Kalan tüm dikey alanı doldur */
+    padding-right: 10px; /* Kaydırma çubuğu için boşluk */
+}
+
+.settings-divider {
+    border: none;
+    border-top: 1px solid #444;
+    margin: 20px 0;
+}
+
+/* Ayarlar Form Stilleri */
+.settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.settings-form label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #ccc;
+}
+
+.settings-form input,
+.settings-form select {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: #e0e0e0;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+}
+
+.settings-form small {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: -5px;
+}
+
+.settings-form button {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.sub-form {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    margin-top: 5px;
+}
+.settings-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Sürükle-Bırak için görsel efektler */
+.link-box-wrapper.sortable-ghost {
+    opacity: 0.4;
+    background-color: #333;
+}
+
+.link-box-wrapper.sortable-chosen .link-box {
+    transform: scale(1.05);
+}
+
+.settings-form .hidden {
+    display: none;
+}
+
+/* Özel Resim Yükleme Stilleri */
+#background-custom-input {
+    display: none; /* Gerçek inputu gizle */
+}
+
+.custom-file-upload {
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #333;
+    color: #e0e0e0;
+    text-align: center;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.custom-file-upload:hover {
+    background-color: #444;
+}
+
+#custom-images-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.preview-thumbnail {
+    position: relative;
+    width: 60px;
+    height: 60px;
+}
+
+.preview-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.preview-thumbnail .delete-img-btn {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.preview-thumbnail:hover .delete-img-btn {
+    opacity: 1;
+}
+
+#clear-custom-images-btn {
+    background-color: #c82333;
+    margin-top: 15px;
+}
+
+#clear-custom-images-btn:hover {
+    background-color: #a71d2a;
+}
+
+/* Tehlike / Sıfırlama Butonu Stili */
+.danger-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #c82333;
+    color: white;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.danger-btn:hover {
+    background-color: #a71d2a;
+}
+
+/* Hava Durumu Modal Stilleri */
+#weather-forecast-details {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.forecast-day {
+    display: grid;
+    grid-template-columns: 100px 40px 1fr;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 6px;
+}
+
+.forecast-day .day-name {
+    font-weight: 500;
+}
+
+.forecast-day .icon {
+    font-size: 1.5rem;
+}
+
+.forecast-day .temps {
+    text-align: right;
+}
+
+.forecast-day .temps .high {
+    font-weight: 500;
+}
+
+.forecast-day .temps .low {
+    color: #aaa;
+    margin-left: 10px;
+}
+
+/* Panel içi kaydırma çubuğu stilleri (Webkit tarayıcılar için) */
+.panel-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.panel-content::-webkit-scrollbar-track {
+    background: transparent; /* Arka planı görünmez yap */
+}
+
+.panel-content::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 4px;
+}
+
+.panel-content::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+#folder-links-container {
+    margin-top: 20px;
+    min-height: 100px;
+}

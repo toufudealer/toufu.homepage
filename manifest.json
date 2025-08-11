@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Kişisel Başlangıç Sayfası",
+  "version": "1.0",
+  "description": "Her yeni sekmede sizi kişisel başlangıç sayfanızla karşılar.",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "host_permissions": [
+    "https://www.bing.com/",
+    "https://geocoding-api.open-meteo.com/",
+    "https://api.open-meteo.com/",
+    "https://duckduckgo.com/"
+  ]
+}
