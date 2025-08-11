@@ -2,9 +2,8 @@
 
 toufu.homepage, tarayıcınızın her yeni sekmesini, ihtiyaçlarınıza göre şekillendirebileceğiniz, şık ve fonksiyonel bir başlangıç sayfasına dönüştüren bir tarayıcı eklentisidir. Güncel saati, hava durumunu, kişisel selamlama mesajını ve sık kullandığınız bağlantıları tek bir ekranda bir araya getirir.
 
-![Proje Ekran Görüntüsü]
-(./resources/screenshot.png) 
 
+![Proje Ekran Görüntüsü](./resources/screenshot.png)
 ## ✨ Özellikler
 
 - **Dinamik Selamlama ve Saat:** Günün saatine göre değişen ("Günaydın", "İyi akşamlar" gibi) selamlama mesajları ve büyük, okunaklı bir dijital saat.
