@@ -669,30 +669,6 @@ function initializeDragAndDrop() {
       onMove: (evt) => {
         return !evt.related.classList.contains('add-link-wrapper');
       },
-      onEnd: (evt) => {
-        const [movedItem] = links.splice(evt.oldIndex, 1);
-        links.splice(evt.newIndex, 0, movedItem);
-        saveLinks();
-
-        const rect = target.getBoundingClientRect();
-        const clientX = evt.originalEvent.clientX;
-        
-        // Kenarlar için bir eşik değeri (örneğin her iki taraftan %25)
-        const edgeThreshold = rect.width * 0.25;
-
-        const isOverCenter = (clientX > rect.left + edgeThreshold) && (clientX < rect.right - edgeThreshold);
-
-        if (isOverCenter) {
-            // --- Gruplama Modu ---
-            target.classList.add('drop-target');
-            // "Sinek yakalama" etkisini önlemek için animasyonu devre dışı bırak.
-            this.option('animation', 0);
-        } else {
-            // --- Sıralama Modu ---
-            // Akıcı kaydırma için animasyonu etkinleştir.
-            this.option('animation', 150);
-        }
-      },
       onEnd: function (evt) { // `this` kullanabilmek için arrow function yerine normal function
         this.option('animation', 150); // Sürükleme bittiğinde animasyonu her zaman varsayılana döndür.
         document.querySelectorAll('.drop-target').forEach(el => el.classList.remove('drop-target'));
