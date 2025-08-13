@@ -46,6 +46,49 @@ let suggestionItems = [];
 let activeFolderSortable = null;
 let currentOpenFolderId = null;
 
+// --- IndexedDB Helper for Storing Large Data ---
+const dbHelper = {
+  DB_NAME: 'NewTabBackgroundsDB',
+  DB_VERSION: 1,
+  STORE_NAME: 'customImages',
+  db: null,
+
+  async openDb() {
+    return new Promise((resolve, reject) => {
+      if (this.db) return resolve(this.db);
+
+      const request = indexedDB.open(this.DB_NAME, this.DB_VERSION);
+
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains(this.STORE_NAME)) {
+          db.createObjectStore(this.STORE_NAME, { autoIncrement: true });
+        }
+      };
+
+      request.onsuccess = (event) => {
+        this.db = event.target.result;
+        resolve(this.db);
+      };
+
+      request.onerror = (event) => reject('IndexedDB error: ' + event.target.errorCode);
+    });
+  },
+
+  async set(value) {
+    const db = await this.openDb();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(this.STORE_NAME, 'readwrite');
+      const store = transaction.objectStore(this.STORE_NAME);
+      const request = store.add(value);
+      request.onsuccess = resolve;
+      request.onerror = () => reject(request.error);
+    });
+  },
+
+  // Diğer metodlar (getAll, delete, clear) renderCustomImagePreview ve diğer fonksiyonlarda kullanılacak
+};
+
 /**
  * localStorage'dan veriyi güvenli bir şekilde alır ve JSON olarak ayrıştırır.
  * @param {string} key - localStorage anahtarı.
@@ -175,10 +218,10 @@ async function applyBackground() {
       }
     }
   } else if (setting.type === 'custom') {
-    const customImages = getStoredJSON('customBackgroundImages', []);
+    const customImages = await dbHelper.getAll();
     if (customImages.length > 0) {
       const randomIndex = Math.floor(Math.random() * customImages.length);
-      document.body.style.backgroundImage = `url('${customImages[randomIndex]}')`;
+      document.body.style.backgroundImage = `url('${customImages[randomIndex].value}')`;
     } else {
       document.body.style.backgroundImage = 'none';
     }
@@ -195,23 +238,22 @@ function toggleBackgroundInputs() {
 }
 
 // Özel resim önizlemelerini oluştur
-function renderCustomImagePreview() {
+async function renderCustomImagePreview() {
   customImagesPreview.innerHTML = '';
-  const customImages = getStoredJSON('customBackgroundImages', []);
-  customImages.forEach((imgData, index) => {
+  const customImages = await dbHelper.getAll();
+  customImages.forEach(imgObject => {
     const thumbWrapper = document.createElement('div');
     thumbWrapper.className = 'preview-thumbnail';
 
     const img = document.createElement('img');
-    img.src = imgData;
+    img.src = imgObject.value;
 
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'delete-img-btn';
     deleteBtn.textContent = '×';
     deleteBtn.title = 'Bu resmi sil';
-    deleteBtn.addEventListener('click', () => {
-      customImages.splice(index, 1);
-      localStorage.setItem('customBackgroundImages', JSON.stringify(customImages));
+    deleteBtn.addEventListener('click', async () => {
+      await dbHelper.delete(imgObject.key);
       renderCustomImagePreview();
       applyBackground(); // Arka planı güncelle
     });
@@ -223,20 +265,19 @@ function renderCustomImagePreview() {
 }
 
 // Tüm özel resimleri temizle
-function clearCustomImages() {
+async function clearCustomImages() {
   if (confirm('Tüm yüklenmiş resimleri silmek istediğinizden emin misiniz?')) {
-    localStorage.removeItem('customBackgroundImages');
+    await dbHelper.clear();
     renderCustomImagePreview();
     applyBackground();
   }
 }
 
 // Özel resim yükleme işlemini yönet
-function handleCustomImageUpload(event) {
+async function handleCustomImageUpload(event) {
   const files = event.target.files;
   if (!files.length) return;
 
-  const existingImages = getStoredJSON('customBackgroundImages', []);
   const fileReadPromises = [];
 
   for (const file of files) {
@@ -251,12 +292,14 @@ function handleCustomImageUpload(event) {
     }
   }
 
-  Promise.all(fileReadPromises).then(newImages => {
-    const allImages = [...existingImages, ...newImages];
-    localStorage.setItem('customBackgroundImages', JSON.stringify(allImages));
+  try {
+    const newImages = await Promise.all(fileReadPromises);
+    for (const imageData of newImages) {
+      await dbHelper.set(imageData);
+    }
     renderCustomImagePreview();
     applyBackground();
-  }).catch(error => console.error("Resim okunurken hata oluştu:", error));
+  } catch (error) { console.error("Resim okunurken veya kaydedilirken hata oluştu:", error); }
 }
 
 // Arama işlemini gerçekleştiren merkezi fonksiyon
@@ -795,6 +838,7 @@ clearCustomImagesBtn.addEventListener('click', clearCustomImages);
 resetAllSettingsBtn.addEventListener('click', () => {
   if (confirm('Tüm ayarları sıfırlamak ve sayfayı yeniden başlatmak istediğinizden emin misiniz? Bu işlem geri alınamaz.')) {
     localStorage.clear();
+    dbHelper.clear(); // IndexedDB'yi de temizle
     location.reload();
   }
 });
@@ -908,6 +952,43 @@ addLinkForm.addEventListener('submit', (event) => {
     renderLinks();
     addLinkForm.reset();
     modal.classList.remove('is-open');
+  }
+});
+
+// IndexedDB Helper'a ek metodlar
+Object.assign(dbHelper, {
+  async getAll() {
+    const db = await this.openDb();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(this.STORE_NAME, 'readonly');
+      const store = transaction.objectStore(this.STORE_NAME);
+      const request = store.getAll();
+      const keysRequest = store.getAllKeys();
+
+      let values, keys;
+
+      request.onsuccess = () => {
+        values = request.result;
+        if (keys) resolve(values.map((v, i) => ({ key: keys[i], value: v })));
+      };
+      keysRequest.onsuccess = () => {
+        keys = keysRequest.result;
+        if (values) resolve(values.map((v, i) => ({ key: keys[i], value: v })));
+      };
+      request.onerror = () => reject(request.error);
+      keysRequest.onerror = () => reject(keysRequest.error);
+    });
+  },
+  async delete(key) {
+    const db = await this.openDb();
+    const transaction = db.transaction(this.STORE_NAME, 'readwrite');
+    const store = transaction.objectStore(this.STORE_NAME);
+    store.delete(key);
+  },
+  async clear() {
+    const db = await this.openDb();
+    const transaction = db.transaction(this.STORE_NAME, 'readwrite');
+    transaction.objectStore(this.STORE_NAME).clear();
   }
 });
 
