@@ -4,12 +4,17 @@ import * as storage from './storage.js';
 const THEME_KEY = 'pageTheme'; // 'light' or 'dark'
 const CUSTOM_STYLE_ELEMENT_ID = 'custom-theme-style';
 const ACTIVE_CUSTOM_THEME_KEY = 'activeCustomThemeName'; // Stores the name of the active custom theme
-let matrixModule = null; // Dinamik olarak yüklenecek Matrix efekti modülü
+
+// --- State ---
+let matrixModule = null; // This will hold the dynamically imported module
+
+// --- Private Core Functions ---
 
 /**
- * Matrix efektini dinamik olarak yükler ve başlatır.
+ * Dynamically loads and starts the Matrix effect.
+ * This is a private helper function.
  */
-async function startMatrixEffect() {
+async function _startMatrixEffect() {
     if (!matrixModule) {
         try {
             // Path must be relative to the extension's root
@@ -23,133 +28,66 @@ async function startMatrixEffect() {
 }
 
 /**
- * Yüklü ise Matrix efektini durdurur.
+ * Stops the Matrix effect if it's running.
+ * This is a private helper function.
  */
-function stopMatrixEffect() {
+function _stopMatrixEffect() {
     if (matrixModule) {
         matrixModule.stopMatrixRain();
     }
 }
 
 /**
- * Applies the given theme to the document and updates the toggle switch.
- * @param {string} theme - The theme to apply ('light' or 'dark').
+ * The single source of truth for applying all theme-related settings.
+ * It reads the current state from localStorage and updates the entire page theme.
+ * This function should be called whenever a theme setting changes.
  */
-function applyTheme(theme) {
-    document.documentElement.dataset.theme = theme;
+async function _updateFullTheme() {
+    // 1. Apply base theme (light/dark)
+    const baseTheme = localStorage.getItem(THEME_KEY) || 'dark';
+    document.documentElement.dataset.theme = baseTheme;
     if (dom.themeToggle) {
-        dom.themeToggle.checked = theme === 'light';
+        dom.themeToggle.checked = baseTheme === 'light';
     }
-}
 
-/**
- * Saves the selected theme to localStorage.
- * @param {string} theme - The theme to save.
- */
-function saveTheme(theme) {
-    localStorage.setItem(THEME_KEY, theme);
-}
-
-/**
- * Injects or updates the custom CSS on the page.
- * @param {string} cssString - The custom CSS to apply.
- */
-function applyCustomCss(cssString) {
+    // 2. Apply custom theme (CSS injection)
+    const activeThemeName = localStorage.getItem(ACTIVE_CUSTOM_THEME_KEY);
     let styleElement = document.getElementById(CUSTOM_STYLE_ELEMENT_ID);
-    if (!styleElement) {
-        styleElement = document.createElement('style');
-        styleElement.id = CUSTOM_STYLE_ELEMENT_ID;
-        document.head.appendChild(styleElement);
-    }
-    styleElement.textContent = cssString;
-}
 
-/**
- * Populates the theme dropdown in settings with saved themes.
- */
-export async function populateThemeDropdown() {
-    const themes = await storage.getAllCustomThemes();
-    dom.themeSelect.innerHTML = '<option value="">Varsayılan Tema</option>'; // Reset
-    themes.forEach(theme => {
-        const option = document.createElement('option');
-        option.value = theme.name;
-        option.textContent = theme.name;
-        dom.themeSelect.appendChild(option);
-    });
+    // Always stop effects before applying a new theme
+    _stopMatrixEffect();
 
-    // Set the dropdown to the currently active theme
-    const activeThemeName = localStorage.getItem(ACTIVE_CUSTOM_THEME_KEY) || '';
-    dom.themeSelect.value = activeThemeName;
-
-    // Also update the textarea with the selected theme's content
-    updateThemePreview();
-}
-
-/**
- * Updates the readonly textarea with the content of the selected theme.
- */
-export async function updateThemePreview() {
-    const selectedThemeName = dom.themeSelect.value;
-    if (selectedThemeName) {
-        const theme = await storage.getCustomTheme(selectedThemeName);
-        dom.customCssInput.value = theme ? theme.css : 'Tema bulunamadı.';
-    } else {
-        dom.customCssInput.value = 'Varsayılan tema seçili. Önizleme yok.';
-    }
-}
-
-/**
- * Sets the selected theme from the dropdown as the active one.
- */
-export async function setActiveTheme() {
-    const themeName = dom.themeSelect.value;
-    if (themeName) {
-        const theme = await storage.getCustomTheme(themeName);
+    if (activeThemeName) {
+        const theme = await storage.getCustomTheme(activeThemeName);
         if (theme) {
-            applyCustomCss(theme.css);
-            localStorage.setItem(ACTIVE_CUSTOM_THEME_KEY, themeName);
-
-            // Efekti tema ismine göre başlat/durdur
-            if (themeName.toLowerCase() === 'matrix') {
-                await startMatrixEffect();
-            } else {
-                stopMatrixEffect();
+            // Ensure the style element for custom CSS exists
+            if (!styleElement) {
+                styleElement = document.createElement('style');
+                styleElement.id = CUSTOM_STYLE_ELEMENT_ID;
+                document.head.appendChild(styleElement);
             }
+            styleElement.textContent = theme.css;
 
-            alert(`'${themeName}' teması aktif edildi.`);
+            // Handle special JS effects for specific themes
+            if (theme.name.toLowerCase().includes('matrix')) {
+                await _startMatrixEffect();
+            }
+        } else {
+            // The active theme was in localStorage but not found in the database.
+            // This can happen if it was deleted. Let's clean up.
+            console.warn(`Aktif tema "${activeThemeName}" veritabanında bulunamadı. Varsayılana dönülüyor.`);
+            localStorage.removeItem(ACTIVE_CUSTOM_THEME_KEY);
+            if (styleElement) styleElement.textContent = '';
         }
     } else {
-        // "Varsayılan Tema" is selected
-        applyCustomCss('');
-        localStorage.removeItem(ACTIVE_CUSTOM_THEME_KEY);
-        stopMatrixEffect(); // Varsayılan temaya dönüldüğünde efekti durdur
-        alert('Varsayılan tema aktif edildi.');
-    }
-}
-
-/**
- * Deletes the currently selected theme from the dropdown.
- */
-export async function deleteSelectedTheme() {
-    const themeName = dom.themeSelect.value;
-    if (!themeName) {
-        alert('Lütfen silmek için bir tema seçin.');
-        return;
-    }
-
-    if (confirm(`'${themeName}' adlı temayı kalıcı olarak silmek istediğinizden emin misiniz?`)) {
-        await storage.deleteCustomTheme(themeName);
-
-        // If the deleted theme was the active one, revert to default
-        if (localStorage.getItem(ACTIVE_CUSTOM_THEME_KEY) === themeName) {
-            applyCustomCss('');
-            localStorage.removeItem(ACTIVE_CUSTOM_THEME_KEY);
+        // No custom theme is active, ensure the style element is empty.
+        if (styleElement) {
+            styleElement.textContent = '';
         }
-
-        await populateThemeDropdown(); // Refresh the dropdown
-        alert(`'${themeName}' teması silindi.`);
     }
 }
+
+// --- Public Functions for Settings Panel ---
 
 /**
  * Imports a .css file, saves it to IndexedDB, and refreshes the dropdown.
@@ -205,35 +143,101 @@ export function importAndSaveThemes(files) {
 }
 
 /**
+ * Populates the theme dropdown in settings with saved themes.
+ */
+export async function populateThemeDropdown() {
+    const themes = await storage.getAllCustomThemes();
+    dom.themeSelect.innerHTML = '<option value="">Varsayılan Tema</option>'; // Reset
+    themes.forEach(theme => {
+        const option = document.createElement('option');
+        option.value = theme.name;
+        option.textContent = theme.name;
+        dom.themeSelect.appendChild(option);
+    });
+
+    // Set the dropdown to the currently active theme
+    const activeThemeName = localStorage.getItem(ACTIVE_CUSTOM_THEME_KEY) || '';
+    dom.themeSelect.value = activeThemeName;
+
+    // Also update the textarea with the selected theme's content
+    updateThemePreview();
+}
+
+/**
+ * Updates the readonly textarea with the content of the selected theme.
+ */
+export async function updateThemePreview() {
+    const selectedThemeName = dom.themeSelect.value;
+    if (selectedThemeName) {
+        const theme = await storage.getCustomTheme(selectedThemeName);
+        dom.customCssInput.value = theme ? theme.css : 'Tema bulunamadı.';
+    } else {
+        dom.customCssInput.value = 'Varsayılan tema seçili. Önizleme yok.';
+    }
+}
+
+/**
+ * Sets the selected theme from the dropdown as the active one.
+ * This function now only updates the state in localStorage and calls the main update function.
+ */
+export async function setActiveTheme() {
+    const themeName = dom.themeSelect.value;
+
+    if (themeName) {
+        localStorage.setItem(ACTIVE_CUSTOM_THEME_KEY, themeName);
+    } else {
+        // "Varsayılan Tema" is selected
+        localStorage.removeItem(ACTIVE_CUSTOM_THEME_KEY);
+    }
+
+    // Apply the changes by calling the master update function
+    await _updateFullTheme();
+
+    alert(`'${themeName || 'Varsayılan'}' tema aktif edildi.`);
+}
+
+/**
+ * Deletes the currently selected theme from the dropdown.
+ */
+export async function deleteSelectedTheme() {
+    const themeName = dom.themeSelect.value;
+    if (!themeName) {
+        alert('Lütfen silmek için bir tema seçin.');
+        return;
+    }
+
+    if (confirm(`'${themeName}' adlı temayı kalıcı olarak silmek istediğinizden emin misiniz?`)) {
+        // If the deleted theme was the active one, remove it from localStorage
+        if (localStorage.getItem(ACTIVE_CUSTOM_THEME_KEY) === themeName) {
+            localStorage.removeItem(ACTIVE_CUSTOM_THEME_KEY);
+        }
+
+        await storage.deleteCustomTheme(themeName);
+        await populateThemeDropdown(); // Refresh the dropdown
+        await _updateFullTheme(); // Re-apply the theme (will revert to default if active was deleted)
+
+        alert(`'${themeName}' teması silindi.`);
+    }
+}
+
+// --- Initialization ---
+
+/**
  * Initializes the theme functionality.
  * Reads the saved theme, applies it, and sets up the event listener.
  */
 export async function initializeTheme() {
-    // Apply light/dark mode
-    const savedTheme = localStorage.getItem(THEME_KEY) || 'dark';
-    applyTheme(savedTheme);
-
-    dom.themeToggle.addEventListener('change', () => {
+    // Set up the light/dark toggle listener
+    dom.themeToggle.addEventListener('change', async () => {
         const newTheme = dom.themeToggle.checked ? 'light' : 'dark';
-        applyTheme(newTheme);
-        saveTheme(newTheme);
+        // Save the new base theme setting
+        localStorage.setItem(THEME_KEY, newTheme);
+        // Re-apply the full theme to ensure consistency
+        await _updateFullTheme();
     });
 
-    // Load and apply active custom theme on startup
-    const activeThemeName = localStorage.getItem(ACTIVE_CUSTOM_THEME_KEY);
-    if (activeThemeName) {
-        const theme = await storage.getCustomTheme(activeThemeName);
-        if (theme) {
-            applyCustomCss(theme.css);
-            // Sayfa açılışında da efekti başlat
-            if (activeThemeName.toLowerCase() === 'matrix') {
-                await startMatrixEffect();
-            }
-        } else {
-            // Active theme was not found in DB, maybe deleted. Revert to default.
-            localStorage.removeItem(ACTIVE_CUSTOM_THEME_KEY);
-        }
-    }
+    // Apply the full theme on startup, which handles both base and custom themes.
+    await _updateFullTheme();
 
     // Populate the theme dropdown in settings
     await populateThemeDropdown();

@@ -10,7 +10,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
 
 /* 2. Adım: Nord renk paletini tanımlayalım ve proje değişkenlerini ezelim */
-body[data-theme='dark'] {
+html[data-theme='dark'] {
     /* Nord Renkleri */
     --nord0: #2E3440; /* Polar Night - Koyu Arka Plan */
     --nord1: #3B4252; /* Polar Night - Yüzey 1 */
@@ -48,6 +48,39 @@ body[data-theme='dark'] {
     --text-shadow: none;
     --overlay-color: rgba(0, 0, 0, 0.1);
     --modal-bg-overlay: rgba(46, 52, 64, 0.85);
+}
+
+/* 3. Adım: Açık tema için de bir palet hazırlayalım */
+html[data-theme='light'] {
+    /* Nord Renkleri (Açık Tema) */
+    --nord0: #2E3440; /* Polar Night - Koyu Yazı */
+    --nord1: #3B4252; /* Polar Night - İkincil Yazı */
+    --nord3: #4C566A; /* Polar Night - Üçüncül Yazı */
+    --nord6: #ECEFF4; /* Snow Storm - Arka Plan */
+    --nord5: #E5E9F0; /* Snow Storm - Yüzey 1 */
+    --nord4: #D8DEE9; /* Snow Storm - Yüzey 2 */
+    --nord10: #5E81AC;/* Frost - Ana Vurgu Rengi (Mavi) */
+    --nord11: #BF616A;/* Aurora - Tehlike Rengi (Kırmızı) */
+
+    /* Proje değişkenlerini Nord renkleriyle ezelim */
+    --bg-color: var(--nord6);
+    --text-color: var(--nord0);
+    --text-color-secondary: var(--nord1);
+    --text-color-tertiary: var(--nord3);
+
+    --primary-accent-color: var(--nord10);
+    --primary-accent-hover-color: var(--nord1);
+
+    --danger-color: var(--nord11);
+    --danger-hover-color: #d08770; /* Aurora - Turuncu */
+    --danger-text-color: var(--nord11);
+
+    --surface-1-color: #FFFFFF; /* Saf beyaz yüzey */
+    --surface-2-color: var(--nord6);
+    --surface-3-color: var(--nord5);
+    --surface-hover-color: var(--nord4);
+
+    --panel-bg-color: #FAFAFA;
 }
 
 /* 3. Adım: Genel yazı tipini ve bazı ek stilleri değiştirelim */

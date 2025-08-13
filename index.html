@@ -277,6 +277,10 @@
 
             <button id="reset-all-settings-btn" class="danger-btn">Tüm Ayarları Sıfırla</button>
         </div>
+        
+        <!-- Ayarları ve temaları içe aktarmak için gizli dosya girişleri -->
+        <input type="file" id="import-settings-input" accept=".json" style="display: none;">
+        <input type="file" id="import-theme-input" accept=".css" style="display: none;" multiple>
     </div>
 
     <!-- Detaylı Hava Durumu Modalı (Gizli) -->
@@ -291,12 +295,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Ayarları içe aktarmak için gizli dosya girişi -->
-    <input type="file" id="import-settings-input" accept=".json" style="display: none;">
-
-    <!-- Özel temaları içe aktarmak için gizli dosya girişi -->
-    <input type="file" id="import-theme-input" accept=".css" style="display: none;" multiple>
 
     <!-- JavaScript dosyamızı bağlıyoruz (body'nin sonunda olması daha iyidir) -->
     <script src="js/Sortable.min.js"></script>

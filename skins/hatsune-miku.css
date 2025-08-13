@@ -43,13 +43,46 @@ html[data-theme='dark'] {
     --modal-bg-overlay: rgba(28, 28, 28, 0.85);
 }
 
-/* 3. Adım: Genel görünümü değiştirelim */
+/* 3. Adım: Açık tema için de bir palet hazırlayalım */
+html[data-theme='light'] {
+    /* Miku Renkleri (Açık Tema) */
+    --miku-teal: #00add8;
+    --miku-pink: #ff3e8e;
+    --miku-dark-text: #0b3948;
+
+    /* Proje değişkenlerini Miku renkleriyle ezelim */
+    --bg-color: #f5feff; /* Çok açık camgöbeği */
+    --text-color: var(--miku-dark-text);
+    --text-color-secondary: #2a5a6a;
+    --text-color-tertiary: #5f7d87;
+
+    --primary-accent-color: var(--miku-teal);
+    --primary-accent-hover-color: #0095b9;
+
+    --danger-color: var(--miku-pink);
+    --danger-hover-color: #e63880;
+    --danger-text-color: var(--miku-pink);
+
+    --surface-1-color: #ffffff;
+    --surface-2-color: #faffff;
+    --surface-3-color: #e6f7fa;
+    --surface-hover-color: #e6f7fa;
+
+    --panel-bg-color: #fdfdff;
+    --switch-bg-color: #b3eaf7;
+
+    --text-shadow: 0 1px 2px rgba(0, 173, 216, 0.15);
+    --overlay-color: rgba(255, 255, 255, 0.2);
+    --modal-bg-overlay: rgba(240, 250, 255, 0.7);
+}
+
+/* 4. Adım: Genel görünümü değiştirelim */
 body {
     font-family: 'Chakra Petch', sans-serif;
     /* Arka plan resmi ayarını ana uygulamaya bırakıyoruz. */
 }
-/* 4. Adım: Elementlere Miku dokunuşu */
 
+/* 5. Adım: Elementlere Miku dokunuşu */
 /* Saat ve selamlama */
 #clock {
     font-weight: 700;
