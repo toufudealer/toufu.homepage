@@ -2,6 +2,7 @@ import * as dom from './dom.js';
 import * as storage from './storage.js';
 import * as api from './api.js';
 import * as config from './config.js';
+import * as rss from './rss.js';
 import { generateId } from './utils.js';
 
 // --- UI State ---
@@ -100,6 +101,12 @@ function renderItem(item, container) {
     const itemWrapper = document.createElement('div');
     itemWrapper.className = 'link-box-wrapper';
     itemWrapper.dataset.id = item.id;
+    
+    // Sağ tık menüsünü ekle
+    itemWrapper.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        showContextMenu(e.clientX, e.clientY, item.id);
+    });
 
     const link = item;
     const linkElement = document.createElement('a');
@@ -118,29 +125,37 @@ function renderItem(item, container) {
     linkElement.appendChild(linkNameSpan);
     itemWrapper.appendChild(linkElement);
 
-    // Her bağlantının silinebilmesi için silme butonu ekle
-    if (item.type === 'link') {
-        const deleteBtn = document.createElement('button');
-        deleteBtn.textContent = '×';
-        deleteBtn.className = 'delete-link-btn';
-        deleteBtn.title = 'Bu öğeyi sil';
-        deleteBtn.addEventListener('click', async (e) => {
-            e.stopPropagation();
-            if (confirm(`'${item.name}' öğesini silmek istediğinizden emin misiniz?`)) {
-                const found = findItemAndParent(item.id);
-                if (found) {
-                    links.splice(found.index, 1);
-                    // Bağlantı silindiğinde ilişkili favicon'u da veritabanından temizle
-                    await storage.deleteFavicon(item.url);
-                    saveLinks();
-                    renderLinks();
-                }
-            }
-        });
-        itemWrapper.appendChild(deleteBtn);
-    }
-
     container.appendChild(itemWrapper);
+}
+
+export function renderRssFeedsList() {
+    dom.rssFeedsList.innerHTML = '';
+    const feeds = storage.getRssFeeds();
+
+    feeds.forEach(feed => {
+        const item = document.createElement('div');
+        item.className = 'rss-feed-item';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = feed.name;
+        nameSpan.title = feed.url;
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = '&times;'; // Use HTML entity for '×'
+        deleteBtn.title = 'Bu akışı sil';
+        deleteBtn.addEventListener('click', (e) => {
+            // Onay kutusu kaldırıldı, direkt silme işlemi yapılıyor.
+            e.stopPropagation(); // Panelin kapanmasını engellemek için olayın yayılmasını durdur.
+            const updatedFeeds = storage.getRssFeeds().filter(f => f.id !== feed.id);
+            storage.saveRssFeeds(updatedFeeds);
+            item.remove(); // Tüm listeyi yeniden çizmek yerine sadece bu öğeyi DOM'dan kaldır.
+            rss.initializeRss(); // Ana RSS widget'ını ve sekmeleri güncelle.
+        });
+
+        item.appendChild(nameSpan);
+        item.appendChild(deleteBtn);
+        dom.rssFeedsList.appendChild(item);
+    });
 }
 
 function populateCountrySelect() {
@@ -218,8 +233,9 @@ export async function renderCustomImagePreview() {
         deleteBtn.className = 'delete-img-btn';
         deleteBtn.textContent = '×';
         deleteBtn.type = 'button'; // Butonun formu göndermesini engellemek için bu satır eklendi.
-        deleteBtn.title = 'Bu resmi sil';
-        deleteBtn.addEventListener('click', async () => {
+        deleteBtn.title = 'Bu resmi sil';        
+        deleteBtn.addEventListener('click', async (e) => {
+            e.stopPropagation(); // Panelin kapanmasını engellemek için olayın yayılmasını durdur.
             await storage.deleteCustomImage(imgObject.key);
             thumbWrapper.remove(); // Tüm listeyi yeniden çizmek yerine sadece silinen öğeyi DOM'dan kaldır.
             applyBackground();
@@ -424,6 +440,88 @@ export function addNewLink(name, url) {
     renderLinks();
 }
 
+export function editLink(id, newName, newUrl) {
+    const found = findItemAndParent(id);
+    if (found) {
+        found.item.name = newName;
+        found.item.url = newUrl;
+        saveLinks();
+        renderLinks(); // Arayüzü güncelle
+    }
+}
+
+export async function deleteLink(id) {
+    const found = findItemAndParent(id);
+    if (found) {
+        // Silmeden önce URL'yi al
+        const urlToDelete = found.item.url;
+        // Diziden öğeyi kaldır
+        links.splice(found.index, 1);
+        saveLinks();
+        renderLinks();
+        // İlişkili favicon'u veritabanından temizle
+        await storage.deleteFavicon(urlToDelete);
+    }
+}
+
+function showContextMenu(x, y, linkId) {
+    hideContextMenu(); // Önce varsa açık menüyü kapat
+    dom.contextMenu.style.display = 'block';
+    dom.contextMenu.style.left = `${x}px`;
+    dom.contextMenu.style.top = `${y}px`;
+    // Tıklanan linkin ID'sini menüye data attribute olarak ekle
+    dom.contextMenu.dataset.linkId = linkId;
+}
+
+export function hideContextMenu() {
+    dom.contextMenu.style.display = 'none';
+    dom.contextMenu.removeAttribute('data-link-id');
+}
+
+export function openEditModalForLink(linkId) {
+    const found = findItemAndParent(linkId);
+    if (found) {
+        dom.editLinkIdInput.value = found.item.id;
+        dom.editLinkNameInput.value = found.item.name;
+        dom.editLinkUrlInput.value = found.item.url;
+        openModal(dom.editLinkModal);
+    }
+}
+
+export function addBulkRssFeeds(urlsText) {
+    const urls = urlsText.split('\n')
+        .map(url => url.trim())
+        .filter(url => url.length > 0 && (url.startsWith('http://') || url.startsWith('https://')));
+
+    if (urls.length === 0) {
+        alert("Lütfen her satıra bir tane olacak şekilde geçerli URL'ler girin.");
+        return;
+    }
+
+    const existingFeeds = storage.getRssFeeds();
+    const newFeeds = urls.map(url => {
+        // URL'den basit bir isim türetmeye çalış
+        let name = url;
+        try {
+            const hostname = new URL(url).hostname.replace(/^www\./, '');
+            name = hostname.split('.')[0];
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+        } catch (e) { /* Hata olursa URL'yi isim olarak kullan */ }
+        return {
+            id: generateId('rss'),
+            name: name,
+            url: url
+        };
+    });
+
+    const updatedFeeds = [...existingFeeds, ...newFeeds];
+    storage.saveRssFeeds(updatedFeeds);
+
+    renderRssFeedsList();
+    rss.initializeRss();
+    alert(`${newFeeds.length} adet yeni RSS akışı başarıyla eklendi.`);
+}
+
 export function toggleSettingsPanel() {
     dom.settingsPanel.classList.toggle('open');
 }
@@ -451,7 +549,19 @@ export function initializeSettingsUI() {
         dom.backgroundUrlInput.value = bgSetting.value;
     }
     toggleBackgroundInputs();
+
+    // RSS ayarını yükle
     renderCustomImagePreview();
+    renderRssFeedsList();
+
+    // RSS sekmeleri yeniden sıralandığında ayarlar panelindeki listeyi
+    // güncellemek için olay dinleyicisi ekle.
+    document.addEventListener('rssFeedsReordered', () => {
+        // Sadece panel açıksa listeyi yeniden çiz.
+        if (dom.settingsPanel.classList.contains('open')) {
+            renderRssFeedsList();
+        }
+    });
 
     // Konum ayarlarını yükle
     const savedLocation = storage.getStoredJSON('weatherLocation', null);

@@ -8,6 +8,7 @@
     },
     "host_permissions": [
         "*://www.google.com/s2/favicons*",
-        "*://*.gstatic.com/*"
+        "*://*.gstatic.com/*",
+        "*://api.rss2json.com/*"
     ]
 }

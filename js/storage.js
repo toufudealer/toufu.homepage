@@ -26,11 +26,21 @@ export function setStoredJSON(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
 }
 
+export function getRssFeeds() {
+    // Varsayılan olarak boş bir dizi döndür
+    return getStoredJSON('rssFeeds', []);
+}
+
+export function saveRssFeeds(feeds) {
+    setStoredJSON('rssFeeds', feeds);
+}
+
 // --- IndexedDB Helper for Storing Large Data (Custom Backgrounds) ---
 const DB_NAME = 'NewTabDB';
-const DB_VERSION = 2; // Veritabanı yapısı değiştiği için versiyonu artırıyoruz.
+const DB_VERSION = 3; // RSS önbelleği için yeni store eklendi.
 const IMG_STORE_NAME = 'customImages';
 const FAVICON_STORE_NAME = 'favicons';
+const RSS_CACHE_STORE_NAME = 'rssCache';
 let db;
 
 // IDBRequest'i Promise'e çeviren yardımcı fonksiyon.
@@ -55,6 +65,9 @@ async function openDb() {
         }
         if (!dbInstance.objectStoreNames.contains(FAVICON_STORE_NAME)) {
           dbInstance.createObjectStore(FAVICON_STORE_NAME);
+        }
+        if (!dbInstance.objectStoreNames.contains(RSS_CACHE_STORE_NAME)) {
+          dbInstance.createObjectStore(RSS_CACHE_STORE_NAME);
         }
       };
 
@@ -116,6 +129,20 @@ export async function deleteFavicon(url) {
     const transaction = dbInstance.transaction(FAVICON_STORE_NAME, 'readwrite');
     const store = transaction.objectStore(FAVICON_STORE_NAME);
     return promisifyRequest(store.delete(url));
+}
+
+export async function getRssCache(url) {
+    const dbInstance = await openDb();
+    const transaction = dbInstance.transaction(RSS_CACHE_STORE_NAME, 'readonly');
+    const store = transaction.objectStore(RSS_CACHE_STORE_NAME);
+    return promisifyRequest(store.get(url));
+}
+
+export async function setRssCache(url, data) {
+    const dbInstance = await openDb();
+    const transaction = dbInstance.transaction(RSS_CACHE_STORE_NAME, 'readwrite');
+    const store = transaction.objectStore(RSS_CACHE_STORE_NAME);
+    return promisifyRequest(store.put(data, url));
 }
 
 export function clearAllStorage() {

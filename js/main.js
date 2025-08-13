@@ -3,7 +3,8 @@ import * as ui from './ui.js';
 import * as storage from './storage.js';
 import * as api from './api.js';
 import * as config from './config.js';
-import { debounce } from './utils.js';
+import * as rss from './rss.js';
+import { debounce, generateId } from './utils.js';
 
 // --- Core Logic / "Controller" Functions ---
 
@@ -65,6 +66,11 @@ function addEventListeners() {
         if (event.target.classList.contains('modal')) {
             ui.closeModal(event.target);
         }
+        // Context menü dışına tıklanınca kapat
+        if (!event.target.closest('#context-menu')) {
+            ui.hideContextMenu();
+        }
+
         if (dom.settingsPanel.classList.contains('open') &&
             !dom.settingsPanel.contains(event.target) &&
             !event.target.closest('#settings-btn')) {
@@ -75,6 +81,78 @@ function addEventListeners() {
     // Close modals with their specific buttons
     dom.addLinkModalCloseBtn.addEventListener('click', () => ui.closeModal(dom.modal));
     dom.closeWeatherModalBtn.addEventListener('click', () => ui.closeModal(dom.weatherModal));
+    dom.editLinkModalCloseBtn.addEventListener('click', () => ui.closeModal(dom.editLinkModal));
+
+    // Context Menu Actions
+    dom.contextMenuEdit.addEventListener('click', () => {
+        const linkId = dom.contextMenu.dataset.linkId;
+        if (linkId) {
+            ui.openEditModalForLink(linkId);
+            ui.hideContextMenu();
+        }
+    });
+
+    dom.contextMenuDelete.addEventListener('click', () => {
+        const linkId = dom.contextMenu.dataset.linkId;
+        if (linkId) {
+            if (confirm('Bu bağlantıyı silmek istediğinizden emin misiniz?')) {
+                ui.deleteLink(linkId);
+            }
+            ui.hideContextMenu();
+        }
+    });
+
+    // Edit Link Form
+    dom.editLinkForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = dom.editLinkIdInput.value;
+        const name = dom.editLinkNameInput.value.trim();
+        const url = dom.editLinkUrlInput.value.trim();
+
+        if (id && name && url) {
+            ui.editLink(id, name, url);
+            ui.closeModal(dom.editLinkModal);
+        }
+    });
+
+    // RSS Akışı Ekleme Formu
+    dom.addRssFeedForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = dom.rssNameInput.value.trim();
+        const url = dom.rssUrlInput.value.trim();
+
+        if (url) {
+            const feeds = storage.getRssFeeds();
+            feeds.push({
+                id: generateId('rss'),
+                name: name || url,
+                url: url
+            });
+            storage.saveRssFeeds(feeds);
+            
+            ui.renderRssFeedsList();
+            rss.initializeRss();
+            dom.addRssFeedForm.reset();
+        }
+    });
+
+    // Toplu RSS Ekleme
+    dom.bulkAddRssBtn.addEventListener('click', () => {
+        const urlsText = dom.bulkRssInput.value.trim();
+        if (urlsText) {
+            ui.addBulkRssFeeds(urlsText);
+            dom.bulkRssInput.value = ''; // İşlem sonrası metin alanını temizle
+        }
+    });
+
+    // Tüm RSS akışlarını temizleme
+    dom.clearRssFeedsBtn.addEventListener('click', () => {
+        if (confirm('Tüm RSS akışlarını silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.')) {
+            storage.saveRssFeeds([]); // Depolamadan temizle
+            ui.renderRssFeedsList(); // Ayarlar panelindeki listeyi güncelle
+            rss.initializeRss(); // Ana RSS widget'ını gizle/güncelle
+        }
+    });
 
     // Settings Panel Forms
     dom.locationForm.addEventListener('submit', (e) => {
@@ -172,6 +250,8 @@ function initializeApp() {
 
     ui.loadAndRenderLinks();
     ui.initializeDragAndDrop();
+
+    rss.initializeRss();
 
     loadWeather();
 

@@ -16,6 +16,13 @@ export const weatherModalCity = document.getElementById('weather-modal-city');
 export const closeWeatherModalBtn = document.getElementById('close-weather-modal-btn');
 export const weatherForecastDetails = document.getElementById('weather-forecast-details');
 export const settingsBtn = document.getElementById('settings-btn');
+
+// RSS Widget
+export const rssWidgetContainer = document.getElementById('rss-widget-container');
+export const rssTabs = document.getElementById('rss-tabs');
+export const rssRefreshBtn = document.getElementById('rss-refresh-btn');
+export const rssTitle = document.getElementById('rss-title');
+export const rssContent = document.getElementById('rss-content');
 export const settingsPanel = document.getElementById('settings-panel');
 export const closeSettingsBtn = document.getElementById('close-settings-btn');
 export const locationForm = document.getElementById('location-form');
@@ -32,4 +39,22 @@ export const backgroundCustomGroup = document.getElementById('background-custom-
 export const backgroundCustomInput = document.getElementById('background-custom-input');
 export const customImagesPreview = document.getElementById('custom-images-preview');
 export const clearCustomImagesBtn = document.getElementById('clear-custom-images-btn');
+export const addRssFeedForm = document.getElementById('add-rss-feed-form');
+export const rssFeedsList = document.getElementById('rss-feeds-list');
+export const rssNameInput = document.getElementById('rss-name-input');
+export const rssUrlInput = document.getElementById('rss-url-input');
+export const bulkRssInput = document.getElementById('bulk-rss-input');
+export const bulkAddRssBtn = document.getElementById('bulk-add-rss-btn');
+export const clearRssFeedsBtn = document.getElementById('clear-rss-feeds-btn');
 export const resetAllSettingsBtn = document.getElementById('reset-all-settings-btn');
+
+// Context Menu & Edit Modal
+export const contextMenu = document.getElementById('context-menu');
+export const contextMenuEdit = document.getElementById('context-menu-edit');
+export const contextMenuDelete = document.getElementById('context-menu-delete');
+export const editLinkModal = document.getElementById('edit-link-modal');
+export const editLinkModalCloseBtn = document.querySelector('#edit-link-modal .close-btn');
+export const editLinkForm = document.getElementById('edit-link-form');
+export const editLinkIdInput = document.getElementById('edit-link-id');
+export const editLinkNameInput = document.getElementById('edit-link-name-input');
+export const editLinkUrlInput = document.getElementById('edit-link-url-input');

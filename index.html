@@ -35,19 +35,52 @@
             <!-- Bağlantılar ve Ekle butonu JavaScript ile buraya eklenecek -->
         </div>
 
-        <!-- Yeni Bağlantı Ekleme Modalı (Gizli) -->
-        <div id="add-link-modal" class="modal">
-            <div class="modal-content">
-                <span class="close-btn">&times;</span>
-                <h2>Yeni Hızlı Bağlantı</h2>
-                <form id="add-link-form">
-                    <input type="text" id="link-name-input" placeholder="Site Adı (isteğe bağlı)" autocomplete="off">
-                    <input type="text" id="link-url-input" placeholder="URL (örn: youtube.com)" required autocomplete="off">
-                    <button type="submit">Kaydet</button>
-                </form>
-            </div>
-        </div>
     </main>
+
+    <!-- RSS Akışı Widget'ı (main dışında, pozisyonu etkilememesi için) -->
+    <div id="rss-widget-container" class="hidden">
+        <div class="rss-header-container">
+            <div id="rss-tabs"></div>
+            <button id="rss-refresh-btn" class="hidden" title="Yenile">↻</button>
+        </div>
+        <h2 id="rss-title"></h2>
+        <div id="rss-content"></div>
+    </div>
+
+    <!-- Yeni Bağlantı Ekleme Modalı (Gizli) -->
+    <div id="add-link-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Yeni Hızlı Bağlantı</h2>
+            <form id="add-link-form">
+                <input type="text" id="link-name-input" placeholder="Site Adı (isteğe bağlı)" autocomplete="off">
+                <input type="text" id="link-url-input" placeholder="URL (örn: youtube.com)" required autocomplete="off">
+                <button type="submit">Kaydet</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Context Menu (Gizli) -->
+    <div id="context-menu" class="context-menu">
+        <ul>
+            <li id="context-menu-edit">Düzenle</li>
+            <li id="context-menu-delete" class="danger-action">Sil</li>
+        </ul>
+    </div>
+
+    <!-- Link Düzenleme Modalı (Gizli) -->
+    <div id="edit-link-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Hızlı Bağlantıyı Düzenle</h2>
+            <form id="edit-link-form">
+                <input type="hidden" id="edit-link-id">
+                <input type="text" id="edit-link-name-input" placeholder="Site Adı" required autocomplete="off">
+                <input type="text" id="edit-link-url-input" placeholder="URL" required autocomplete="off">
+                <button type="submit">Kaydet</button>
+            </form>
+        </div>
+    </div>
 
     <!-- Ayarlar Butonu -->
     <button id="settings-btn" title="Ayarlar">⚙️</button>
@@ -81,6 +114,29 @@
                 <label for="user-name-input">İsminiz</label>
                 <input type="text" id="user-name-input" placeholder="Selamlama için isminizi girin...">
             </div>
+
+            <hr class="settings-divider">
+
+            <div class="settings-form">
+                <label>RSS Akışları</label>
+                <div id="rss-feeds-list">
+                    <!-- Kayıtlı RSS akışları buraya gelecek -->
+                </div>
+                <form id="add-rss-feed-form" class="sub-form">
+                    <input type="text" id="rss-name-input" placeholder="Akış Adı (isteğe bağlı)">
+                    <input type="url" id="rss-url-input" placeholder="Akış URL'si" required>
+                    <button type="submit">+</button>
+                </form>
+                <small>En az bir akış eklendiğinde widget görünür.</small>
+            </div>
+
+            <div class="settings-form">
+                <label for="bulk-rss-input">Toplu RSS Ekle (Her Satıra Bir URL)</label>
+                <textarea id="bulk-rss-input" rows="5" placeholder="https://site1.com/rss.xml&#10;https://site2.com/feed"></textarea>
+                <button type="button" id="bulk-add-rss-btn">Toplu Ekle</button>
+            </div>
+
+            <button type="button" id="clear-rss-feeds-btn" class="danger-btn">Tüm RSS Akışlarını Temizle</button>
 
             <hr class="settings-divider">
 
