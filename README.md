@@ -14,9 +14,9 @@ toufu.homepage, tarayıcınızın her yeni sekmesini, ihtiyaçlarınıza göre �
   - Belirlediğiniz konum için güncel hava durumu bilgisi.
   - Tıklandığında açılan 7 günlük detaylı hava tahmini.
 - **Kişiselleştirilebilir Hızlı Bağlantılar:**
-  - Sık kullandığınız siteleri ekleyin, silin ve yeniden sıralayın.
+  - Sık kullandığınız siteleri kolayca ekleyin.
+  - **Sağ Tık Menüsü:** Bağlantılara sağ tıklayarak açılan menüden hızlıca "Düzenle" ve "Sil" işlemlerini yapın.
   - **Sürükle ve Bırak:** Bağlantıları kolayca sürükleyerek yeniden düzenleyin.
-  - **Klasörleme:** İki bağlantıyı üst üste sürükleyerek otomatik olarak klasörler oluşturun ve düzenli bir görünüm elde edin.
 - **Özelleştirilebilir Arka Plan:**
   - **Bing Günün Resmi:** Arka planı her gün otomatik olarak Bing'in resmiyle güncelleyin.
   - **URL:** İstediğiniz bir resim URL'sini arka plan olarak ayarlayın.
