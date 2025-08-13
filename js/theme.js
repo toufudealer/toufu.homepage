@@ -36,7 +36,7 @@ function stopMatrixEffect() {
  * @param {string} theme - The theme to apply ('light' or 'dark').
  */
 function applyTheme(theme) {
-    document.body.dataset.theme = theme;
+    document.documentElement.dataset.theme = theme;
     if (dom.themeToggle) {
         dom.themeToggle.checked = theme === 'light';
     }

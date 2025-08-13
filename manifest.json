@@ -16,6 +16,7 @@
         "*://www.google.com/s2/favicons*",
         "*://*.gstatic.com/*",
         "*://api.rss2json.com/*",
-        "*://duckduckgo.com/*"
+        "*://duckduckgo.com/*",
+        "*://www.bing.com/*"
     ]
 }

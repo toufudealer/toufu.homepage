@@ -27,6 +27,7 @@ toufu.homepage, tarayıcınızın her yeni sekmesini, ihtiyaçlarınıza göre �
   - Sekmeleri sürükleyip bırakarak akış sırasını kişiselleştirin.
   - Performans için akış verileri otomatik olarak önbelleğe alınır.
 - **Kullanıcı Dostu Ayarlar Paneli:** Tüm bu özellikleri tek bir yerden kolayca yönetin.
+**TEMA ÖZELLİĞİ**
 
 ## 🚀 Kurulum
 
