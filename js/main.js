@@ -123,9 +123,17 @@ function addEventListeners() {
     dom.clearCustomImagesBtn.addEventListener('click', ui.clearCustomImages);
 
     dom.resetAllSettingsBtn.addEventListener('click', async () => {
-        if (confirm('Tüm ayarları sıfırlamak ve sayfayı yeniden başlatmak istediğinizden emin misiniz? Bu işlem geri alınamaz.')) {
-            await storage.clearAllStorage();
-            location.reload();
+        const isConfirmed = confirm('Tüm ayarları sıfırlamak ve sayfayı yeniden başlatmak istediğinizden emin misiniz? Bu işlem geri alınamaz.');
+
+        if (isConfirmed) {
+            try {
+                await storage.clearAllStorage();
+                alert('Tüm ayarlar başarıyla sıfırlandı. Sayfa şimdi yeniden yüklenecek.');
+                location.reload();
+            } catch (error) {
+                alert('Ayarlar sıfırlanırken bir hata oluştu. Lütfen konsolu kontrol edin.');
+                console.error('Sıfırlama hatası:', error);
+            }
         }
     });
 

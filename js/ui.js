@@ -49,6 +49,53 @@ function getDayName(dateString, index) {
     return new Intl.DateTimeFormat('tr-TR', options).format(date);
 }
 
+async function loadAndSetFavicon(imgElement, linkUrl) {
+    // 1. Önbellekten almayı dene
+    try {
+        const cachedFavicon = await storage.getFavicon(linkUrl);
+        if (cachedFavicon) {
+            imgElement.src = cachedFavicon;
+            return;
+        }
+    } catch (error) {
+        console.error("Favicon önbellekten okunurken hata:", error);
+    }
+
+    // 2. Önbellekte yoksa, Google'ın API'sinden çek ve önbelleğe al
+    // NOT: Bu işlemin çalışması için manifest.json dosyasında host izni gerekir.
+    const faviconApiUrl = `https://www.google.com/s2/favicons?sz=32&domain_url=${linkUrl}`;
+
+    // Hata durumunda ikonu gizlemek için onerror olayını ayarla
+    imgElement.onerror = () => { imgElement.style.display = 'none'; };
+
+    try {
+        // fetch ve blob kullanarak favicon'u alıp önbelleğe kaydediyoruz.
+        // Bu, manifest.json'daki host izni sayesinde CORS hatası vermeyecektir.
+        const response = await fetch(faviconApiUrl);
+        if (!response.ok) {
+            imgElement.src = faviconApiUrl; // Başarısız olursa tarayıcının normal yüklemesine izin ver
+            return;
+        }
+
+        const blob = await response.blob();
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64data = reader.result;
+            // Google'ın boş yanıtı (genellikle < 200 byte) gibi çok küçük resimleri kaydetme.
+            if (base64data && typeof base64data === 'string' && base64data.length > 200) {
+                imgElement.src = base64data; // Resmi ekranda göster.
+                storage.setFavicon(linkUrl, base64data); // Gelecekte kullanmak için önbelleğe al.
+            } else {
+                imgElement.src = faviconApiUrl; // Geçerli ikon değilse normal yüklemeyi dene.
+            }
+        };
+        reader.readAsDataURL(blob);
+    } catch (error) {
+        console.error(`Favicon alınırken ağ hatası oluştu (${linkUrl}):`, error);
+        imgElement.src = faviconApiUrl; // Hata durumunda bile tarayıcının ikonu normal yolla yüklemesine izin ver.
+    }
+}
+
 function renderItem(item, container) {
     const itemWrapper = document.createElement('div');
     itemWrapper.className = 'link-box-wrapper';
@@ -62,8 +109,7 @@ function renderItem(item, container) {
 
     const faviconImg = document.createElement('img');
     faviconImg.className = 'favicon-img';
-    faviconImg.src = `https://www.google.com/s2/favicons?sz=32&domain_url=${link.url}`;
-    faviconImg.onerror = () => { faviconImg.style.display = 'none'; };
+    loadAndSetFavicon(faviconImg, link.url); // Önbellek destekli yükleyiciyi kullan
 
     const linkNameSpan = document.createElement('span');
     linkNameSpan.textContent = link.name;
@@ -78,12 +124,14 @@ function renderItem(item, container) {
         deleteBtn.textContent = '×';
         deleteBtn.className = 'delete-link-btn';
         deleteBtn.title = 'Bu öğeyi sil';
-        deleteBtn.addEventListener('click', (e) => {
+        deleteBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
             if (confirm(`'${item.name}' öğesini silmek istediğinizden emin misiniz?`)) {
                 const found = findItemAndParent(item.id);
                 if (found) {
                     links.splice(found.index, 1);
+                    // Bağlantı silindiğinde ilişkili favicon'u da veritabanından temizle
+                    await storage.deleteFavicon(item.url);
                     saveLinks();
                     renderLinks();
                 }
@@ -169,10 +217,11 @@ export async function renderCustomImagePreview() {
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'delete-img-btn';
         deleteBtn.textContent = '×';
+        deleteBtn.type = 'button'; // Butonun formu göndermesini engellemek için bu satır eklendi.
         deleteBtn.title = 'Bu resmi sil';
         deleteBtn.addEventListener('click', async () => {
             await storage.deleteCustomImage(imgObject.key);
-            renderCustomImagePreview();
+            thumbWrapper.remove(); // Tüm listeyi yeniden çizmek yerine sadece silinen öğeyi DOM'dan kaldır.
             applyBackground();
         });
 

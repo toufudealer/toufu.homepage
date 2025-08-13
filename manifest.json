@@ -1,15 +1,13 @@
 {
-  "manifest_version": 3,
-  "name": "Kişisel Başlangıç Sayfası",
-  "version": "1.0",
-  "description": "Her yeni sekmede sizi kişisel başlangıç sayfanızla karşılar.",
-  "chrome_url_overrides": {
-    "newtab": "index.html"
-  },
-  "host_permissions": [
-    "https://www.bing.com/",
-    "https://geocoding-api.open-meteo.com/",
-    "https://api.open-meteo.com/",
-    "https://duckduckgo.com/"
-  ]
+    "manifest_version": 3,
+    "name": "Yeni Sekme Sayfası",
+    "version": "1.0",
+    "description": "Kişiselleştirilebilir yeni sekme sayfası.",
+    "chrome_url_overrides": {
+        "newtab": "index.html"
+    },
+    "host_permissions": [
+        "*://www.google.com/s2/favicons*",
+        "*://*.gstatic.com/*"
+    ]
 }

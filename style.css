@@ -214,13 +214,15 @@ h1 {
     border-radius: 50%;
     width: 20px;
     height: 20px;
-    font-size: 12px;
-    line-height: 20px;
-    text-align: center;
+    font-size: 14px;
     cursor: pointer;
     opacity: 0; /* Normalde görünmez */
     transition: opacity 0.2s, transform 0.2s;
     transform: scale(0.8);
+    /* Flexbox ile 'x' işaretini tam ortalamak için */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .link-box-wrapper.drop-target .link-box {
@@ -582,12 +584,14 @@ h1 {
     border-radius: 50%;
     width: 18px;
     height: 18px;
-    font-size: 12px;
-    line-height: 18px;
-    text-align: center;
+    font-size: 14px;
     cursor: pointer;
     opacity: 0;
     transition: opacity 0.2s;
+    /* Flexbox ile 'x' işaretini tam ortalamak için */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .preview-thumbnail:hover .delete-img-btn {

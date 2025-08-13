@@ -111,6 +111,13 @@ export async function setFavicon(url, base64data) {
     return promisifyRequest(store.put(base64data, url));
 }
 
+export async function deleteFavicon(url) {
+    const dbInstance = await openDb();
+    const transaction = dbInstance.transaction(FAVICON_STORE_NAME, 'readwrite');
+    const store = transaction.objectStore(FAVICON_STORE_NAME);
+    return promisifyRequest(store.delete(url));
+}
+
 export function clearAllStorage() {
     localStorage.clear();
 
