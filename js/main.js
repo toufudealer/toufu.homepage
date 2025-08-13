@@ -4,12 +4,16 @@ import * as storage from './storage.js';
 import * as api from './api.js';
 import * as config from './config.js';
 import * as rss from './rss.js';
+import * as widgets from './widgets.js';
+import * as theme from './theme.js';
+import * as settingsManager from './settingsManager.js';
 import { debounce, generateId } from './utils.js';
 
 // --- Core Logic / "Controller" Functions ---
 
 function performSearch(query) {
     if (!query) return;
+    storage.addSearchToHistory(query);
     const selectedEngineKey = localStorage.getItem('searchEngine') || 'google';
     const searchURLTemplate = config.searchEngines[selectedEngineKey].url;
     window.location.href = `${searchURLTemplate}${encodeURIComponent(query)}`;
@@ -28,8 +32,33 @@ async function loadWeather() {
 }
 
 async function handleAutocomplete(query) {
-    const suggestions = await api.fetchAutocompleteSuggestions(query);
-    ui.renderSuggestions(suggestions, performSearch);
+    if (!query) {
+        ui.clearSuggestions();
+        return;
+    }
+
+    // Fetch API suggestions in parallel
+    const apiSuggestionsPromise = api.fetchAutocompleteSuggestions(query);
+
+    // Get local history suggestions
+    const searchHistory = storage.getSearchHistory();
+    const historySuggestions = searchHistory.filter(item =>
+        item.toLowerCase().includes(query.toLowerCase()) && item.toLowerCase() !== query.toLowerCase()
+    );
+
+    const apiSuggestions = await apiSuggestionsPromise;
+
+    // Combine and remove duplicates, giving priority to history
+    const combined = [
+        ...historySuggestions.map(s => ({ text: s, type: 'history' })),
+        ...apiSuggestions.map(s => ({ text: s, type: 'api' }))
+    ];
+
+    const uniqueSuggestions = combined.filter((suggestion, index, self) =>
+        index === self.findIndex((s) => s.text.toLowerCase() === suggestion.text.toLowerCase())
+    );
+
+    ui.renderSuggestions(uniqueSuggestions.slice(0, 10), performSearch); // Limit to 10 total suggestions
 }
 
 // --- Event Listeners Setup ---
@@ -154,6 +183,18 @@ function addEventListeners() {
         }
     });
 
+    // Özel Widget Ekleme Formu
+    dom.addCustomWidgetForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = dom.customWidgetNameInput.value.trim();
+        const url = dom.customWidgetUrlInput.value.trim();
+
+        if (name && url) {
+            ui.addCustomWidget(name, url);
+            dom.addCustomWidgetForm.reset();
+        }
+    });
+
     // Settings Panel Forms
     dom.locationForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -215,6 +256,43 @@ function addEventListeners() {
         }
     });
 
+    // Settings Import/Export
+    dom.exportSettingsBtn.addEventListener('click', settingsManager.exportSettings);
+
+    dom.importSettingsBtn.addEventListener('click', () => {
+        dom.importSettingsInput.click(); // Trigger the hidden file input
+    });
+
+    dom.importSettingsInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            settingsManager.importSettings(file);
+        }
+        // Reset the input so the 'change' event fires even if the same file is selected again
+        event.target.value = null;
+    });
+
+    // Custom Theme (CSS)
+    dom.importThemeBtn.addEventListener('click', () => {
+        dom.importThemeInput.click();
+    });
+
+    dom.importThemeInput.addEventListener('change', (event) => {
+        const files = event.target.files;
+        if (files.length > 0) {
+            theme.importAndSaveThemes(files);
+        }
+        event.target.value = null; // Reset for re-selection
+    });
+
+    dom.themeSelect.addEventListener('change', () => {
+        theme.updateThemePreview();
+    });
+
+    dom.setActiveThemeBtn.addEventListener('click', theme.setActiveTheme);
+
+    dom.deleteThemeBtn.addEventListener('click', theme.deleteSelectedTheme);
+
     // Link & Folder Modals
     dom.addLinkForm.addEventListener('submit', (event) => {
         event.preventDefault();
@@ -253,10 +331,16 @@ function initializeApp() {
 
     rss.initializeRss();
 
+    ui.renderCustomWidgetsOnPage();
+
     loadWeather();
 
     ui.initializeSettingsUI();
     ui.updateSearchPlaceholder();
+
+    widgets.initializeWidgets();
+
+    theme.initializeTheme();
 
     addEventListeners();
 }

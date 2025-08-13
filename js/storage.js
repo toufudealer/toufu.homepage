@@ -35,12 +35,51 @@ export function saveRssFeeds(feeds) {
     setStoredJSON('rssFeeds', feeds);
 }
 
+export function getCustomWidgets() {
+    return getStoredJSON('customWidgets', []);
+}
+
+export function saveCustomWidgets(widgets) {
+    setStoredJSON('customWidgets', widgets);
+}
+
+const SEARCH_HISTORY_KEY = 'searchHistory';
+const MAX_HISTORY_SIZE = 20;
+
+export function getSearchHistory() {
+    return getStoredJSON(SEARCH_HISTORY_KEY, []);
+}
+
+export function addSearchToHistory(query) {
+    if (!query) return;
+    let history = getSearchHistory();
+    // Remove existing entry to move it to the top
+    const lowerCaseQuery = query.toLowerCase();
+    history = history.filter(item => item.toLowerCase() !== lowerCaseQuery);
+    // Add new query to the beginning
+    history.unshift(query);
+    // Limit history size
+    if (history.length > MAX_HISTORY_SIZE) {
+        history.pop();
+    }
+    setStoredJSON(SEARCH_HISTORY_KEY, history);
+}
+
+export function removeSearchFromHistory(query) {
+    if (!query) return;
+    let history = getSearchHistory();
+    const lowerCaseQuery = query.toLowerCase();
+    history = history.filter(item => item.toLowerCase() !== lowerCaseQuery);
+    setStoredJSON(SEARCH_HISTORY_KEY, history);
+}
+
 // --- IndexedDB Helper for Storing Large Data (Custom Backgrounds) ---
 const DB_NAME = 'NewTabDB';
-const DB_VERSION = 3; // RSS önbelleği için yeni store eklendi.
+const DB_VERSION = 4; // Özel temalar için yeni store eklendi.
 const IMG_STORE_NAME = 'customImages';
 const FAVICON_STORE_NAME = 'favicons';
 const RSS_CACHE_STORE_NAME = 'rssCache';
+const THEME_STORE_NAME = 'customThemes';
 let db;
 
 // IDBRequest'i Promise'e çeviren yardımcı fonksiyon.
@@ -68,6 +107,9 @@ async function openDb() {
         }
         if (!dbInstance.objectStoreNames.contains(RSS_CACHE_STORE_NAME)) {
           dbInstance.createObjectStore(RSS_CACHE_STORE_NAME);
+        }
+        if (!dbInstance.objectStoreNames.contains(THEME_STORE_NAME)) {
+          dbInstance.createObjectStore(THEME_STORE_NAME, { keyPath: 'name' });
         }
       };
 
@@ -143,6 +185,34 @@ export async function setRssCache(url, data) {
     const transaction = dbInstance.transaction(RSS_CACHE_STORE_NAME, 'readwrite');
     const store = transaction.objectStore(RSS_CACHE_STORE_NAME);
     return promisifyRequest(store.put(data, url));
+}
+
+export async function addCustomTheme(name, css) {
+    const dbInstance = await openDb();
+    const transaction = dbInstance.transaction(THEME_STORE_NAME, 'readwrite');
+    const store = transaction.objectStore(THEME_STORE_NAME);
+    return promisifyRequest(store.put({ name, css }));
+}
+
+export async function getCustomTheme(name) {
+    const dbInstance = await openDb();
+    const transaction = dbInstance.transaction(THEME_STORE_NAME, 'readonly');
+    const store = transaction.objectStore(THEME_STORE_NAME);
+    return promisifyRequest(store.get(name));
+}
+
+export async function getAllCustomThemes() {
+    const dbInstance = await openDb();
+    const transaction = dbInstance.transaction(THEME_STORE_NAME, 'readonly');
+    const store = transaction.objectStore(THEME_STORE_NAME);
+    return promisifyRequest(store.getAll());
+}
+
+export async function deleteCustomTheme(name) {
+    const dbInstance = await openDb();
+    const transaction = dbInstance.transaction(THEME_STORE_NAME, 'readwrite');
+    const store = transaction.objectStore(THEME_STORE_NAME);
+    return promisifyRequest(store.delete(name));
 }
 
 export function clearAllStorage() {

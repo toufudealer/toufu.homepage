@@ -16,6 +16,7 @@ export const weatherModalCity = document.getElementById('weather-modal-city');
 export const closeWeatherModalBtn = document.getElementById('close-weather-modal-btn');
 export const weatherForecastDetails = document.getElementById('weather-forecast-details');
 export const settingsBtn = document.getElementById('settings-btn');
+export const themeToggle = document.getElementById('theme-toggle');
 
 // RSS Widget
 export const rssWidgetContainer = document.getElementById('rss-widget-container');
@@ -47,6 +48,27 @@ export const bulkRssInput = document.getElementById('bulk-rss-input');
 export const bulkAddRssBtn = document.getElementById('bulk-add-rss-btn');
 export const clearRssFeedsBtn = document.getElementById('clear-rss-feeds-btn');
 export const resetAllSettingsBtn = document.getElementById('reset-all-settings-btn');
+export const widgetManager = document.getElementById('widget-manager');
+
+// Custom Widgets
+export const customWidgetArea = document.getElementById('custom-widget-area');
+export const addCustomWidgetForm = document.getElementById('add-custom-widget-form');
+export const customWidgetNameInput = document.getElementById('custom-widget-name-input');
+export const customWidgetUrlInput = document.getElementById('custom-widget-url-input');
+export const customWidgetsList = document.getElementById('custom-widgets-list');
+
+// Settings Import/Export
+export const importSettingsBtn = document.getElementById('import-settings-btn');
+export const exportSettingsBtn = document.getElementById('export-settings-btn');
+export const importSettingsInput = document.getElementById('import-settings-input');
+
+// Custom Theme (CSS)
+export const themeSelect = document.getElementById('theme-select');
+export const importThemeBtn = document.getElementById('import-theme-btn');
+export const importThemeInput = document.getElementById('import-theme-input');
+export const customCssInput = document.getElementById('custom-css-input');
+export const setActiveThemeBtn = document.getElementById('set-active-theme-btn');
+export const deleteThemeBtn = document.getElementById('delete-theme-btn');
 
 // Context Menu & Edit Modal
 export const contextMenu = document.getElementById('context-menu');

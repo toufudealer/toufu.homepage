@@ -6,9 +6,16 @@
     "chrome_url_overrides": {
         "newtab": "index.html"
     },
+    "web_accessible_resources": [
+        {
+            "resources": [ "skins/*.css", "skins/js/*.js" ],
+            "matches": [ "<all_urls>" ]
+        }
+    ],
     "host_permissions": [
         "*://www.google.com/s2/favicons*",
         "*://*.gstatic.com/*",
-        "*://api.rss2json.com/*"
+        "*://api.rss2json.com/*",
+        "*://duckduckgo.com/*"
     ]
 }

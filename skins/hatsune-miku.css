@@ -1,0 +1,119 @@
+/*
+ * ========================================
+ *       Hatsune Miku "Project Diva" Teması
+ * ========================================
+ * Dijital sahneye hoş geldin! 39!
+ */
+
+/* 1. Adım: Temaya uygun fütüristik bir fontu Google Fonts'tan çekelim */
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;700&display=swap');
+
+/* 2. Adım: Miku renk paletini tanımlayalım */
+html[data-theme='dark'] {
+    /* Miku Renkleri */
+    --miku-teal: #00add8;
+    --miku-teal-light: #81e7ff;
+    --miku-pink: #ff3e8e;
+    --miku-black: #1c1c1c;
+    --miku-grey: #333333;
+
+    /* Proje değişkenlerini Miku renkleriyle ezelim */
+    --bg-color: var(--miku-black);
+    --text-color: var(--miku-teal-light);
+    --text-color-secondary: var(--miku-teal);
+    --text-color-tertiary: #888;
+
+    --primary-accent-color: var(--miku-teal);
+    --primary-accent-hover-color: var(--miku-teal-light);
+
+    --danger-color: var(--miku-pink);
+    --danger-hover-color: #ff7bac;
+    --danger-text-color: var(--miku-pink);
+
+    --surface-1-color: var(--miku-grey);
+    --surface-2-color: #444;
+    --surface-3-color: #555;
+    --surface-hover-color: #4a4a4a;
+
+    --panel-bg-color: #222;
+    --switch-bg-color: var(--miku-grey);
+
+    --text-shadow: 0 0 8px var(--miku-teal);
+    --overlay-color: rgba(0, 0, 0, 0.2);
+    --modal-bg-overlay: rgba(28, 28, 28, 0.85);
+}
+
+/* 3. Adım: Genel görünümü değiştirelim */
+body {
+    font-family: 'Chakra Petch', sans-serif;
+    /* Arka plan resmi ayarını ana uygulamaya bırakıyoruz. */
+}
+/* 4. Adım: Elementlere Miku dokunuşu */
+
+/* Saat ve selamlama */
+#clock {
+    font-weight: 700;
+    text-shadow: 0 0 5px var(--miku-teal-light), 0 0 15px var(--miku-teal);
+    letter-spacing: 2px;
+}
+
+h1 {
+    font-weight: 500;
+    text-shadow: 0 0 8px var(--miku-teal); /* Pembe yerine Miku mavisi vurgu */
+}
+
+/* Arama çubuğu ve kutular */
+#search-input, #search-form button, .link-box, .modal-content, .panel, .custom-widget-box, #rss-widget-container, .context-menu, #autocomplete-suggestions {
+    border-radius: 4px;
+    border: 1px solid var(--miku-grey);
+    box-shadow: inset 0 0 8px rgba(0, 173, 216, 0.2);
+}
+
+.link-box:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 0 15px var(--miku-teal);
+    border-color: var(--miku-teal);
+}
+
+/* Yüklenme animasyonu */
+@keyframes miku-pulse {
+  0% { box-shadow: 0 0 5px var(--miku-teal); } /* Pembe yerine açık mavi ile pulse efekti */
+  50% { box-shadow: 0 0 20px var(--miku-teal-light); }
+  100% { box-shadow: 0 0 5px var(--miku-teal); }
+}
+
+.link-box.link-loading {
+    animation: miku-pulse 1.5s infinite;
+    transform: none;
+}
+
+/* Ayarlar butonu (Pırasa!) */
+#settings-btn {
+    font-size: 0; /* Orijinal emojiyi gizle */
+    border-radius: 50%;
+    background-color: var(--surface-1-color);
+    border-color: var(--miku-teal);
+    transition: all 0.2s ease-in-out;
+}
+
+#settings-btn::before {
+    content: '🥬'; /* Pırasa (Leek) */
+    font-size: 1.8rem;
+    transition: transform 0.2s ease;
+}
+
+#settings-btn:hover {
+    background-color: var(--miku-teal);
+    transform: rotate(360deg);
+}
+#settings-btn:hover::before {
+    transform: scale(1.2);
+}
+
+/* Kaydırma çubuğu */
+.panel-content::-webkit-scrollbar-thumb {
+    background-color: var(--miku-teal);
+}
+.panel-content::-webkit-scrollbar-track {
+    background: var(--miku-black);
+}

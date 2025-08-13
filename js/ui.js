@@ -285,24 +285,62 @@ export function renderSuggestions(suggestions, performSearch) {
     activeSuggestionIndex = -1;
     suggestionItems = [];
 
-    suggestions.forEach(text => {
+    suggestions.forEach(suggestion => {
         const item = document.createElement('div');
         item.className = 'suggestion-item';
-        item.textContent = text;
+
+        const textSpan = document.createElement('span');
+        textSpan.className = 'suggestion-text';
+        textSpan.textContent = suggestion.text;
+
+        item.appendChild(textSpan);
+
+        if (suggestion.type === 'history') {
+            item.classList.add('history-suggestion');
+
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-suggestion-btn';
+            removeBtn.innerHTML = '&times;'; // '×' karakteri
+            removeBtn.title = 'Geçmişten kaldır';
+
+            removeBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Öneri öğesinin tıklama olayını engelle
+                storage.removeSearchFromHistory(suggestion.text);
+                item.remove(); // Anında DOM'dan kaldır
+            });
+
+            item.appendChild(removeBtn);
+        }
+
         item.addEventListener('click', () => {
-            dom.searchInput.value = text;
+            dom.searchInput.value = suggestion.text;
             clearSuggestions();
-            performSearch(text);
+            performSearch(suggestion.text);
         });
         dom.autocompleteSuggestions.appendChild(item);
         suggestionItems.push(item);
     });
 
-    dom.autocompleteSuggestions.style.display = suggestionItems.length > 0 ? 'block' : 'none';
+    const hasSuggestions = suggestionItems.length > 0;
+    dom.autocompleteSuggestions.style.display = hasSuggestions ? 'block' : 'none';
+
+    // Arama çubuğu köşelerini öneri kutusunun durumuna göre ayarla
+    const searchButton = dom.searchForm.querySelector('button');
+    if (hasSuggestions) {
+        dom.searchInput.classList.add('suggestions-open');
+        searchButton?.classList.add('suggestions-open');
+    } else {
+        dom.searchInput.classList.remove('suggestions-open');
+        searchButton?.classList.remove('suggestions-open');
+    }
 }
 
 export function clearSuggestions() {
     dom.autocompleteSuggestions.style.display = 'none';
+    // Arama çubuğu köşelerini eski haline getir
+    const searchButton = dom.searchForm.querySelector('button');
+    dom.searchInput.classList.remove('suggestions-open');
+    searchButton?.classList.remove('suggestions-open');
 }
 
 export function handleKeyboardNavigation(e, performSearch) {
@@ -363,9 +401,11 @@ export function getDetailedWeatherData() {
 }
 
 export function renderLinks() {
-    dom.quickLinksContainer.innerHTML = '';
-    links.forEach(item => renderItem(item, dom.quickLinksContainer));
+    // 1. Tüm elemanları eklemek için bir DocumentFragment oluştur.
+    const fragment = document.createDocumentFragment();
+    links.forEach(item => renderItem(item, fragment)); // Elemanları fragment'a ekle
 
+    // "Ekle" butonunu da fragment'a ekle
     const addLinkWrapper = document.createElement('div');
     addLinkWrapper.className = 'link-box-wrapper add-link-wrapper';
     addLinkWrapper.innerHTML = `<a href="#" class="link-box add-link-box" title="Yeni bağlantı ekle">+</a>`;
@@ -374,7 +414,11 @@ export function renderLinks() {
         openModal(dom.modal);
         dom.linkNameInput.focus();
     });
-    dom.quickLinksContainer.appendChild(addLinkWrapper);
+    fragment.appendChild(addLinkWrapper);
+
+    // 2. Konteyneri bir kez temizle ve fragment'ı tek seferde ekle.
+    dom.quickLinksContainer.innerHTML = '';
+    dom.quickLinksContainer.appendChild(fragment);
 }
 
 export function loadAndRenderLinks() {
@@ -554,6 +598,9 @@ export function initializeSettingsUI() {
     renderCustomImagePreview();
     renderRssFeedsList();
 
+    // Özel widget listesini ayarlar paneline çiz
+    renderCustomWidgetsListInSettings();
+
     // RSS sekmeleri yeniden sıralandığında ayarlar panelindeki listeyi
     // güncellemek için olay dinleyicisi ekle.
     document.addEventListener('rssFeedsReordered', () => {
@@ -562,11 +609,84 @@ export function initializeSettingsUI() {
             renderRssFeedsList();
         }
     });
-
+    
     // Konum ayarlarını yükle
     const savedLocation = storage.getStoredJSON('weatherLocation', null);
     if (savedLocation) {
         dom.locationInput.value = savedLocation.city || '';
         dom.countrySelect.value = savedLocation.country || 'TR';
     }
+}
+
+export function renderCustomWidgetsOnPage() {
+    dom.customWidgetArea.innerHTML = '';
+    const customWidgets = storage.getCustomWidgets();
+
+    customWidgets.forEach(widget => {
+        const widgetBox = document.createElement('div');
+        widgetBox.className = 'custom-widget-box';
+        widgetBox.dataset.widgetId = widget.id;
+
+        const title = document.createElement('h3');
+        title.textContent = widget.name;
+
+        const iframe = document.createElement('iframe');
+        iframe.src = widget.url;
+        iframe.sandbox = 'allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts';
+        iframe.loading = 'lazy';
+
+        widgetBox.appendChild(title);
+        widgetBox.appendChild(iframe);
+        dom.customWidgetArea.appendChild(widgetBox);
+    });
+}
+
+export function renderCustomWidgetsListInSettings() {
+    dom.customWidgetsList.innerHTML = '';
+    const customWidgets = storage.getCustomWidgets();
+
+    customWidgets.forEach(widget => {
+        const item = document.createElement('div');
+        item.className = 'custom-widget-item';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = widget.name;
+        nameSpan.title = widget.url;
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = '&times;';
+        deleteBtn.title = 'Bu widget\'ı sil';
+        deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (confirm(`'${widget.name}' adlı widget'ı silmek istediğinizden emin misiniz?`)) {
+                // Bu fonksiyon zaten render fonksiyonlarını tekrar çağıracaktır.
+                deleteCustomWidget(widget.id);
+            }
+        });
+
+        item.appendChild(nameSpan);
+        item.appendChild(deleteBtn);
+        dom.customWidgetsList.appendChild(item);
+    });
+}
+
+export function addCustomWidget(name, url) {
+    const customWidgets = storage.getCustomWidgets();
+    const newWidget = {
+        id: generateId('customwidget'),
+        name: name,
+        url: url
+    };
+    customWidgets.push(newWidget);
+    storage.saveCustomWidgets(customWidgets);
+    renderCustomWidgetsOnPage();
+    renderCustomWidgetsListInSettings();
+}
+
+export function deleteCustomWidget(id) {
+    let customWidgets = storage.getCustomWidgets();
+    customWidgets = customWidgets.filter(w => w.id !== id);
+    storage.saveCustomWidgets(customWidgets);
+    renderCustomWidgetsOnPage();
+    renderCustomWidgetsListInSettings();
 }
