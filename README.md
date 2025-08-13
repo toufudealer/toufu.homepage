@@ -21,6 +21,11 @@ toufu.homepage, tarayıcınızın her yeni sekmesini, ihtiyaçlarınıza göre �
   - **Bing Günün Resmi:** Arka planı her gün otomatik olarak Bing'in resmiyle güncelleyin.
   - **URL:** İstediğiniz bir resim URL'sini arka plan olarak ayarlayın.
   - **Kendi Resimleriniz:** Bilgisayarınızdan resimler yükleyerek rastgele bir tanesinin gösterilmesini sağlayın.
+- **Entegre RSS Okuyucu:**
+  - İstediğiniz RSS akışlarını (tekli veya toplu) ekleyerek en son haberleri ve içerikleri takip edin.
+  - Akışlar arasında sekmelerle kolayca geçiş yapın ve "Tümü" sekmesinde birleşik bir görünüm elde edin.
+  - Sekmeleri sürükleyip bırakarak akış sırasını kişiselleştirin.
+  - Performans için akış verileri otomatik olarak önbelleğe alınır.
 - **Kullanıcı Dostu Ayarlar Paneli:** Tüm bu özellikleri tek bir yerden kolayca yönetin.
 
 ## 🚀 Kurulum
@@ -49,6 +54,7 @@ Bu eklentiyi tarayıcınızda yerel olarak çalıştırmak için aşağıdaki ad
 - **Bing Image of the Day API:** Arka plan resmi için kullanıldı.
 - **DuckDuckGo Autocomplete API:** Arama önerileri için kullanıldı.
 - **Google S2 Favicon:** Hızlı bağlantıların ikonlarını çekmek için kullanıldı.
+- **RSS2JSON API:** RSS akışlarını JSON formatına çevirmek için kullanıldı.
 
 ## 📄 Lisans
 
