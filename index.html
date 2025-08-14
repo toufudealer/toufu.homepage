@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeni Sekme</title>
+     <!-- CSS dosyamızı bağlıyoruz -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Matrix "Dijital Yağmur" efekti için canvas -->
+    <canvas id="matrix-rain-canvas"></canvas>
+
+    <!-- Arka plan resmi üzerine gelen karartma katmanı -->
+    <div id="background-overlay"></div>
+
+    <!-- Saat burada görünecek -->
+    <div id="clock"></div>
+    <!-- Hava durumu burada görünecek -->
+    <div id="weather-container"></div>
+
+    <main>
+        <!-- Selamlama mesajı -->
+        <h1 id="greeting"></h1>
+
+        <!-- Arama Bölümü -->
+        <div id="search-container">
+            <form id="search-form">
+                <input type="text" id="search-input" placeholder="Arama yap..." autocomplete="off" autofocus>
+                <button type="submit">Ara</button>
+            </form>
+            <div id="autocomplete-suggestions"></div>
+        </div>
+        <!-- Hızlı Bağlantılar -->
+        <div class="quick-links" id="quick-links-container">
+            <!-- Bağlantılar ve Ekle butonu JavaScript ile buraya eklenecek -->
+        </div>
+
+        <!-- Özel Widget Alanı -->
+        <div id="custom-widget-area"></div>
+    </main>
+
+    <!-- RSS Akışı Widget'ı (main dışında, pozisyonu etkilememesi için) -->
+    <div id="rss-widget-container" class="hidden">
+        <div class="rss-header-container">
+            <div id="rss-tabs"></div>
+            <button id="rss-refresh-btn" class="hidden" title="Yenile">↻</button>
+        </div>
+        <h2 id="rss-title"></h2>
+        <div id="rss-content"></div>
+    </div>
+
+    <!-- Yeni Bağlantı Ekleme Modalı (Gizli) -->
+    <div id="add-link-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Yeni Hızlı Bağlantı</h2>
+            <form id="add-link-form">
+                <input type="text" id="link-name-input" placeholder="Site Adı (isteğe bağlı)" autocomplete="off">
+                <input type="text" id="link-url-input" placeholder="URL (örn: youtube.com)" required autocomplete="off">
+                <button type="submit">Kaydet</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Context Menu (Gizli) -->
+    <div id="context-menu" class="context-menu">
+        <ul>
+            <li id="context-menu-edit">Düzenle</li>
+            <li id="context-menu-delete" class="danger-action">Sil</li>
+        </ul>
+    </div>
+
+    <!-- Link Düzenleme Modalı (Gizli) -->
+    <div id="edit-link-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Hızlı Bağlantıyı Düzenle</h2>
+            <form id="edit-link-form">
+                <input type="hidden" id="edit-link-id">
+                <input type="text" id="edit-link-name-input" placeholder="Site Adı" required autocomplete="off">
+                <input type="text" id="edit-link-url-input" placeholder="URL" required autocomplete="off">
+                <button type="submit">Kaydet</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ayarlar Butonu -->
+    <button id="settings-btn" title="Ayarlar">⚙️</button>
+
+    <!-- Ayarlar Paneli (Gizli) -->
+    <div id="settings-panel" class="panel">
+        <div class="panel-header">
+            <h2>Ayarlar</h2>
+            <span id="close-settings-btn" class="close-btn">&times;</span>
+        </div>
+        <div class="panel-content">
+            <div class="settings-form">
+                <label>Tema</label>
+                <div class="theme-switcher">
+                    <span>Koyu</span>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                    <span>Açık</span>
+                </div>
+            </div>
+
+            <hr class="settings-divider">
+
+            <form id="location-form" class="settings-form">
+                <label for="country-select">Ülke</label>
+                <select id="country-select"></select>
+                <label for="location-input">Şehir / İlçe</label>
+                <input type="text" id="location-input" placeholder="örn: Ankara veya Çankaya">
+                <small>Hava durumu için konum girmeniz gereklidir.</small>
+                <button type="submit">Kaydet</button>
+            </form>
+
+            <hr class="settings-divider">
+
+            <div class="settings-form">
+                <label for="search-engine-select">Arama Motoru</label>
+                <select id="search-engine-select"></select>
+            </div>
+
+            <hr class="settings-divider">
+
+            <div class="settings-form">
+                <label for="user-name-input">İsminiz</label>
+                <input type="text" id="user-name-input" placeholder="Selamlama için isminizi girin...">
+            </div>
+
+            <hr class="settings-divider">
+
+            <div class="settings-form">
+                <label>RSS Akışları</label>
+                <div id="rss-feeds-list">
+                    <!-- Kayıtlı RSS akışları buraya gelecek -->
+                </div>
+                <form id="add-rss-feed-form" class="sub-form">
+                    <input type="text" id="rss-name-input" placeholder="Akış Adı (isteğe bağlı)">
+                    <input type="url" id="rss-url-input" placeholder="Akış URL'si" required>
+                    <button type="submit">+</button>
+                </form>
+                <small>En az bir akış eklendiğinde widget görünür.</small>
+            </div>
+
+            <div class="settings-form">
+                <label for="bulk-rss-input">Toplu RSS Ekle (Her Satıra Bir URL)</label>
+                <textarea id="bulk-rss-input" rows="5" placeholder="https://site1.com/rss.xml&#10;https://site2.com/feed"></textarea>
+                <button type="button" id="bulk-add-rss-btn">Toplu Ekle</button>
+            </div>
+
+            <button type="button" id="clear-rss-feeds-btn" class="danger-btn">Tüm RSS Akışlarını Temizle</button>
+
+            <hr class="settings-divider">
+
+            <form id="background-form" class="settings-form">
+                <label for="background-source-select">Arka Plan Kaynağı</label>
+                <select id="background-source-select">
+                    <option value="none">Varsayılan Renk</option>
+                    <option value="url">URL</option>
+                    <option value="bing">Bing Günün Resmi</option>
+                    <option value="custom">Kendi Resimlerim</option>
+                </select>
+
+                <div id="background-url-group" class="hidden">
+                    <label for="background-url-input">Resim URL'si</label>
+                    <input type="text" id="background-url-input" placeholder="https://.../image.jpg">
+                </div>
+
+                <div id="background-custom-group" class="hidden">
+                    <label for="background-custom-input" class="custom-file-upload">
+                        Resim Seç...
+                    </label>
+                    <input type="file" id="background-custom-input" multiple accept="image/*">
+                    <div id="custom-images-preview"></div>
+                    <button type="button" id="clear-custom-images-btn">Tümünü Temizle</button>
+                </div>
+
+                <button type="submit">Kaydet</button>
+            </form>
+
+            <hr class="settings-divider">
+
+            <div class="settings-form">
+                <label>Widget'ları Yönet</label>
+                <div id="widget-manager">
+                    <!-- Örnek Widget Toggle -->
+                    <div class="widget-toggle">
+                        <span>Selamlama & Arama</span>
+                        <label class="switch">
+                            <input type="checkbox" data-widget-id="greeting" checked disabled>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="widget-toggle">
+                        <span>Hızlı Bağlantılar</span>
+                        <label class="switch">
+                            <input type="checkbox" data-widget-id="quicklinks" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="widget-toggle">
+                        <span>Saat</span>
+                        <label class="switch">
+                            <input type="checkbox" data-widget-id="clock" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="widget-toggle">
+                        <span>Hava Durumu</span>
+                        <label class="switch">
+                            <input type="checkbox" data-widget-id="weather" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="widget-toggle">
+                        <span>RSS Akışı</span>
+                        <label class="switch">
+                            <input type="checkbox" data-widget-id="rss" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+                <small>Göstermek istediğiniz widget'ları seçin.</small>
+            </div>
+
+            <hr class="settings-divider">
+
+            <div class="settings-form">
+                <label>Özel Widget'lar</label>
+                <div id="custom-widgets-list">
+                    <!-- Kayıtlı özel widget'lar buraya gelecek -->
+                </div>
+                <form id="add-custom-widget-form" class="sub-form">
+                    <input type="text" id="custom-widget-name-input" placeholder="Widget Adı" required>
+                    <input type="url" id="custom-widget-url-input" placeholder="Widget URL'si (iframe)" required>
+                    <button type="submit">+</button>
+                </form>
+                <small>URL'si verilen sayfa bir iframe içinde gösterilecektir. Bazı siteler buna izin vermeyebilir.</small>
+                <small><b>Not:</b> Bu özellik henüz test aşamasındadır ve hatalar içerebilir.</small>
+            </div>
+
+            <hr class="settings-divider">
+
+            <div class="settings-form">
+                <label for="theme-select">Özel Temalar</label>
+                <div class="theme-management-controls">
+                    <select id="theme-select">
+                        <option value="">Varsayılan Tema</option>
+                        <!-- Yüklenen temalar buraya gelecek -->
+                    </select>
+                    <button type="button" id="import-theme-btn" title="Yeni Tema(lar) İçe Aktar (.css)">+</button>
+                </div>
+                <textarea id="custom-css-input" rows="8" readonly placeholder="Seçili temanın içeriği burada görünür..."></textarea>
+                <div class="settings-io-buttons">
+                    <button type="button" id="delete-theme-btn" class="danger-btn">Seçili Temayı Sil</button>
+                    <button type="button" id="set-active-theme-btn">Aktif Tema Yap</button>
+                </div>
+                <small><b>Not:</b> Temaları içe/dışa aktarma özelliği ile paylaşabilirsiniz.</small>
+            </div>
+
+            <div class="settings-form">
+                <label>Ayarları Yönet</label>
+                <div class="settings-io-buttons">
+                    <button type="button" id="import-settings-btn">İçe Aktar (JSON)</button>
+                    <button type="button" id="export-settings-btn">Dışa Aktar (JSON)</button>
+                </div>
+                <small>Tüm tema ve widget ayarlarınızı bir dosyaya kaydedin veya başkasınınkini yükleyin.</small>
+            </div>
+
+            <hr class="settings-divider">
+
+            <button id="reset-all-settings-btn" class="danger-btn">Tüm Ayarları Sıfırla</button>
+        </div>
+        
+        <!-- Ayarları ve temaları içe aktarmak için gizli dosya girişleri -->
+        <input type="file" id="import-settings-input" accept=".json" style="display: none;">
+        <input type="file" id="import-theme-input" accept=".css" style="display: none;" multiple>
+    </div>
+
+    <!-- Detaylı Hava Durumu Modalı (Gizli) -->
+    <div id="weather-modal" class="modal">
+        <div class="modal-content">
+            <div class="panel-header">
+                <h2 id="weather-modal-city">Hava Durumu Tahmini</h2>
+                <span id="close-weather-modal-btn" class="close-btn">&times;</span>
+            </div>
+            <div id="weather-forecast-details">
+                <!-- Detaylı tahmin buraya gelecek -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript dosyamızı bağlıyoruz (body'nin sonunda olması daha iyidir) -->
+    <script src="js/Sortable.min.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

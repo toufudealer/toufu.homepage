@@ -1,0 +1,25 @@
+Projede Yapılan Son Değişiklikler Özeti
+=======================================
+
+Bu belgede, projede son zamanlarda yapılan önemli teknik iyileştirmeler ve yapısal değişiklikler özetlenmektedir.
+
+1. Dosya Yapısının Düzenlenmesi
+-------------------------------
+- Tüm JavaScript dosyaları (`script.js`, `Sortable.min.js`) projenin daha düzenli olması amacıyla `./js/` klasörü altına taşınmıştır.
+- `index.html` dosyasındaki `<script>` etiketlerinin yolları bu yeni yapıya uygun olarak güncellenmiştir.
+
+2. Veri Depolama Stratejisinin İyileştirilmesi
+----------------------------------------------
+Uygulamanın performansını artırmak ve daha büyük verileri (özellikle kullanıcı tarafından yüklenen arka plan resimleri) verimli bir şekilde yönetmek için veri depolama mantığı yeniden yapılandırılmıştır.
+
+- **localStorage:** Ayarlar, hızlı bağlantılar gibi küçük boyutlu ve sık erişilen veriler için kullanılmaya devam etmektedir. `localStorage` senkron çalıştığı için küçük verilerde hızlıdır.
+
+- **IndexedDB:** Özel arka plan resimleri gibi büyük boyutlu verilerin (Base64 formatındaki resimler) depolanması için `IndexedDB` kullanılmaya başlanmıştır.
+  - **Neden IndexedDB?**
+    - **Performans:** `IndexedDB` asenkron çalışır. Bu sayede büyük resim dosyalarını kaydederken veya okurken tarayıcının ana iş parçacığı kilitlenmez ve kullanıcı arayüzünde donmalar yaşanmaz.
+    - **Depolama Limiti:** `localStorage`'ın 5-10 MB'lık kısıtlı depolama alanının aksine, `IndexedDB` çok daha büyük (gigabaytlar mertebesinde) depolama alanı sunar. Bu, kullanıcıların çok sayıda özel arka plan resmi eklemesine olanak tanır.
+
+- **Uygulanan Değişiklikler:**
+  - `js/script.js` dosyasına `IndexedDB` işlemlerini (veri ekleme, okuma, silme) kolaylaştıran bir `dbHelper` nesnesi eklenmiştir.
+  - Resim yükleme, gösterme ve silme ile ilgili tüm fonksiyonlar (`handleCustomImageUpload`, `renderCustomImagePreview`, `applyBackground`, `clearCustomImages`) `async` hale getirilmiş ve `localStorage` yerine `IndexedDB` kullanacak şekilde güncellenmiştir.
+  - "Tüm Ayarları Sıfırla" fonksiyonu, artık hem `localStorage`'ı hem de `IndexedDB`'deki resim veritabanını temizlemektedir.

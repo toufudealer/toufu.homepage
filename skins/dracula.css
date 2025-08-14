@@ -1,0 +1,133 @@
+/*
+ * ========================================
+ *          Dracula Official Teması
+ * ========================================
+ * "I am Dracula. I bid you welcome."
+ */
+
+/* 1. Adım: Temaya uygun bir fontu Google Fonts'tan çekelim */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+
+/* 2. Adım: Koyu tema için Dracula renk paletini tanımlayalım */
+html[data-theme='dark'] {
+    /* Dracula Renkleri */
+    --dracula-bg: #282a36;
+    --dracula-current-line: #44475a;
+    --dracula-fg: #f8f8f2;
+    --dracula-comment: #6272a4;
+    --dracula-cyan: #8be9fd;
+    --dracula-green: #50fa7b;
+    --dracula-orange: #ffb86c;
+    --dracula-pink: #ff79c6;
+    --dracula-purple: #bd93f9;
+    --dracula-red: #ff5555;
+    --dracula-yellow: #f1fa8c;
+
+    /* Proje değişkenlerini Dracula renkleriyle ezelim */
+    --bg-color: var(--dracula-bg);
+    --text-color: var(--dracula-fg);
+    --text-color-secondary: var(--dracula-comment);
+    --text-color-tertiary: #525c85;
+
+    --primary-accent-color: var(--dracula-pink);
+    --primary-accent-hover-color: #ff95d5;
+
+    --danger-color: var(--dracula-red);
+    --danger-hover-color: #ff7b7b;
+    --danger-text-color: var(--dracula-red);
+
+    --surface-1-color: var(--dracula-current-line);
+    --surface-2-color: #3a3d4d;
+    --surface-3-color: var(--dracula-comment);
+    --surface-hover-color: #3a3d4d;
+
+    --panel-bg-color: #21222c;
+    --switch-bg-color: var(--dracula-comment);
+    --switch-checked-bg-color: var(--dracula-purple);
+
+    --text-shadow: 0 0 2px rgba(255, 121, 198, 0.3);
+    --overlay-color: rgba(0, 0, 0, 0.2);
+    --modal-bg-overlay: rgba(40, 42, 54, 0.85);
+}
+
+/* 3. Adım: Açık tema için de bir palet hazırlayalım (Dracula Light) */
+html[data-theme='light'] {
+    /* Dracula Renkleri (Açık Tema) */
+    --dracula-bg-light: #f8f8f2;
+    --dracula-fg-light: #282a36;
+    --dracula-pink: #ff79c6;
+    --dracula-purple: #bd93f9;
+    --dracula-red: #ff5555;
+
+    /* Proje değişkenlerini Dracula renkleriyle ezelim */
+    --bg-color: var(--dracula-bg-light);
+    --text-color: var(--dracula-fg-light);
+    --text-color-secondary: #6272a4;
+    --text-color-tertiary: #94a1c7;
+
+    --primary-accent-color: var(--dracula-pink);
+    --primary-accent-hover-color: #e66ab5;
+
+    --danger-color: var(--dracula-red);
+    --danger-hover-color: #e64d4d;
+    --danger-text-color: var(--dracula-red);
+
+    --surface-1-color: #ffffff;
+    --surface-2-color: #f1f1f1;
+    --surface-3-color: #e8e8e8;
+    --surface-hover-color: #f1f1f1;
+
+    --panel-bg-color: #fafafa;
+    --switch-bg-color: #dcdcdc;
+    --switch-checked-bg-color: var(--dracula-purple);
+
+    --text-shadow: none;
+    --overlay-color: rgba(255, 255, 255, 0.1);
+    --modal-bg-overlay: rgba(248, 248, 242, 0.7);
+}
+
+/* 4. Adım: Genel yazı tipini ve bazı ek stilleri değiştirelim */
+body {
+    font-family: 'Fira Code', monospace;
+}
+
+/* Saat ve Selamlama */
+#clock {
+    font-weight: 500;
+    text-shadow: 0 0 5px var(--primary-accent-color);
+}
+
+h1 {
+    font-weight: 400;
+    color: var(--dracula-purple);
+}
+
+/* Tüm kutulara daha keskin köşeler */
+.link-box, .modal-content, .panel, .custom-widget-box, #rss-widget-container, .context-menu, .settings-form button, .settings-form input, .settings-form select, .settings-form textarea, #search-input, #search-form button, #autocomplete-suggestions {
+    border-radius: 4px;
+    border: 1px solid var(--surface-3-color);
+}
+
+/* Arama çubuğu */
+#search-input, #search-form button {
+    background-color: var(--surface-1-color);
+}
+
+/* Butonlar */
+.settings-form button, .settings-io-buttons button {
+    background-color: var(--dracula-purple);
+    color: var(--dracula-fg);
+    border: none;
+}
+.settings-form button:hover, .settings-io-buttons button:hover {
+    background-color: #d6a7ff;
+}
+html[data-theme='light'] .settings-form button,
+html[data-theme='light'] .settings-io-buttons button {
+    color: #f8f8f2;
+}
+
+.danger-btn {
+    background-color: var(--dracula-red) !important;
+    color: var(--dracula-fg) !important;
+}

@@ -1,0 +1,132 @@
+/*
+ * ========================================
+ *          Nordic Calm Teması
+ * ========================================
+ * Sakin, minimalist ve göz yormayan bir arayüz için.
+ * Bu kodu kopyalayıp ayarlardaki "Özel Tema (CSS)" kutusuna yapıştırın.
+ */
+
+/* 1. Adım: Temaya uygun temiz bir fontu Google Fonts'tan çekelim */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+
+/* 2. Adım: Nord renk paletini tanımlayalım ve proje değişkenlerini ezelim */
+html[data-theme='dark'] {
+    /* Nord Renkleri */
+    --nord0: #2E3440; /* Polar Night - Koyu Arka Plan */
+    --nord1: #3B4252; /* Polar Night - Yüzey 1 */
+    --nord2: #434C5E; /* Polar Night - Yüzey 2 */
+    --nord3: #4C566A; /* Polar Night - Yüzey 3 / İkincil Yazı */
+    --nord4: #D8DEE9; /* Snow Storm - İkincil Yazı */
+    --nord5: #E5E9F0; /* Snow Storm - Ana Yazı */
+    --nord6: #ECEFF4; /* Snow Storm - En Açık Yazı */
+    --nord8: #88C0D0; /* Frost - Ana Vurgu Rengi (Mavi) */
+    --nord7: #8FBCBB; /* Frost - İkincil Vurgu Rengi (Yeşilimsi Mavi) */
+    --nord11: #BF616A;/* Aurora - Tehlike Rengi (Kırmızı) */
+
+    /* Proje değişkenlerini Nord renkleriyle ezelim */
+    --bg-color: var(--nord0);
+    --text-color: var(--nord5);
+    --text-color-secondary: var(--nord4);
+    --text-color-tertiary: var(--nord3);
+
+    --primary-accent-color: var(--nord8);
+    --primary-accent-hover-color: var(--nord7);
+
+    --danger-color: var(--nord11);
+    --danger-hover-color: #d08770; /* Aurora - Turuncu */
+    --danger-text-color: var(--nord11);
+
+    --surface-1-color: var(--nord1);
+    --surface-2-color: var(--nord2);
+    --surface-3-color: var(--nord3);
+    --surface-hover-color: var(--nord2);
+
+    --panel-bg-color: #292E39; /* Biraz daha koyu panel */
+    --switch-bg-color: var(--nord3);
+
+    /* Efektleri kaldıralım veya azaltalım */
+    --text-shadow: none;
+    --overlay-color: rgba(0, 0, 0, 0.1);
+    --modal-bg-overlay: rgba(46, 52, 64, 0.85);
+}
+
+/* 3. Adım: Açık tema için de bir palet hazırlayalım */
+html[data-theme='light'] {
+    /* Nord Renkleri (Açık Tema) */
+    --nord0: #2E3440; /* Polar Night - Koyu Yazı */
+    --nord1: #3B4252; /* Polar Night - İkincil Yazı */
+    --nord3: #4C566A; /* Polar Night - Üçüncül Yazı */
+    --nord6: #ECEFF4; /* Snow Storm - Arka Plan */
+    --nord5: #E5E9F0; /* Snow Storm - Yüzey 1 */
+    --nord4: #D8DEE9; /* Snow Storm - Yüzey 2 */
+    --nord10: #5E81AC;/* Frost - Ana Vurgu Rengi (Mavi) */
+    --nord11: #BF616A;/* Aurora - Tehlike Rengi (Kırmızı) */
+
+    /* Proje değişkenlerini Nord renkleriyle ezelim */
+    --bg-color: var(--nord6);
+    --text-color: var(--nord0);
+    --text-color-secondary: var(--nord1);
+    --text-color-tertiary: var(--nord3);
+
+    --primary-accent-color: var(--nord10);
+    --primary-accent-hover-color: var(--nord1);
+
+    --danger-color: var(--nord11);
+    --danger-hover-color: #d08770; /* Aurora - Turuncu */
+    --danger-text-color: var(--nord11);
+
+    --surface-1-color: #FFFFFF; /* Saf beyaz yüzey */
+    --surface-2-color: var(--nord6);
+    --surface-3-color: var(--nord5);
+    --surface-hover-color: var(--nord4);
+
+    --panel-bg-color: #FAFAFA;
+}
+
+/* 3. Adım: Genel yazı tipini ve bazı ek stilleri değiştirelim */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Saat ve Selamlama için daha hafif bir görünüm */
+#clock {
+    font-weight: 300;
+    letter-spacing: 0;
+}
+
+h1 {
+    font-weight: 300;
+}
+
+/* Tüm kutulara daha yumuşak bir köşe verelim */
+.link-box, .modal-content, .panel, .custom-widget-box, #rss-widget-container, .context-menu, .settings-form button, .settings-form input, .settings-form select, .settings-form textarea {
+    border-radius: 6px;
+}
+
+/* Arama çubuğu ve butonları */
+#search-input, #search-form button {
+    border-color: transparent;
+}
+
+#search-form button:hover {
+    background-color: var(--primary-accent-color);
+    color: var(--nord0);
+}
+
+/* Ayarlar panelindeki butonlar için küçük bir animasyon */
+.settings-form button, .settings-io-buttons button {
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.settings-form button:active {
+    transform: scale(0.98);
+}
+
+/* Aktif RSS sekmesi */
+.rss-tab.active {
+    background-color: var(--primary-accent-color);
+    color: var(--nord0);
+}
+.rss-tab:hover {
+    background-color: var(--surface-3-color);
+}
