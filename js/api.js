@@ -68,13 +68,21 @@ export async function fetchWeather() {
     const locationNameForDisplay = (name !== admin1 && admin1) ? `${name}, ${admin1}` : `${name}`;
 
     // 2. Hava durumu verisini çek
-    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto`;
+    // Open-Meteo'nun `current_weather=true` parametresi kullanımdan kaldırılmıştır.
+    // Bunun yerine `current` parametresi ile istenen veriler belirtilmelidir.
+    // Bu değişiklik, API'nin gelecekteki sürümleriyle uyumluluğu artırır ve olası hataları önler.
+    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto`;
     const weatherResponse = await fetch(weatherUrl);
     if (!weatherResponse.ok) throw new Error('Hava durumu verisi alınamadı.');
     const weatherData = await weatherResponse.json();
 
-    const dataToReturn = { current: weatherData.current_weather, daily: weatherData.daily, locationName: locationNameForDisplay, locationNameForTitle: name };
-
+    // API yanıtı değiştiği için (`current` vs `current_weather`), uygulamanın geri kalanının
+    // etkilenmemesi için eski veri yapısını taklit eden bir nesne oluşturuyoruz.
+    const currentWeatherData = {
+        temperature: weatherData.current.temperature_2m,
+        weathercode: weatherData.current.weather_code
+    };
+    const dataToReturn = { current: currentWeatherData, daily: weatherData.daily, locationName: locationNameForDisplay, locationNameForTitle: name };
     // --- Yeni Veriyi Önbelleğe Al ---
     const dataToCache = {
         timestamp: Date.now(),
