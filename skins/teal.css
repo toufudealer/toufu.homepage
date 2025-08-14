@@ -1,0 +1,106 @@
+/*
+ * ========================================
+ *          Modern Teal Teması
+ * ========================================
+ * Modern, temiz ve canlı bir arayüz.
+ */
+
+/* 1. Adım: Temaya uygun bir fontu Google Fonts'tan çekelim */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+
+/* 2. Adım: Koyu tema için renk paletini tanımlayalım */
+html[data-theme='dark'] {
+    /* Teal Renkleri (Koyu) */
+    --teal-dark-bg: #0d2b30;
+    --teal-surface: #103f4a;
+    --teal-primary: #4db6ac;
+    --teal-secondary: #80cbc4;
+    --teal-text: #e0f2f1;
+    --teal-danger: #ff8a65;
+
+    /* Proje değişkenlerini Teal renkleriyle ezelim */
+    --bg-color: var(--teal-dark-bg);
+    --text-color: var(--teal-text);
+    --text-color-secondary: #b2dfdb;
+    --text-color-tertiary: #80cbc4;
+
+    --primary-accent-color: var(--teal-primary);
+    --primary-accent-hover-color: var(--teal-secondary);
+
+    --danger-color: var(--teal-danger);
+    --danger-hover-color: #ffab91;
+    --danger-text-color: var(--teal-danger);
+
+    --surface-1-color: var(--teal-surface);
+    --surface-2-color: #15525e;
+    --surface-3-color: #1a6673;
+    --surface-hover-color: #15525e;
+
+    --panel-bg-color: #0b2529;
+    --switch-bg-color: var(--teal-surface);
+
+    --text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    --overlay-color: rgba(0, 0, 0, 0.2);
+    --modal-bg-overlay: rgba(13, 43, 48, 0.85);
+
+    /* Hava Durumu Efekt Renkleri */
+    --weather-rain-color: 128, 203, 196; /* teal-secondary */
+    --weather-snow-color: 224, 242, 241; /* teal-text */
+    --weather-lightning-color: 255, 138, 101; /* teal-danger */
+}
+
+/* 3. Adım: Açık tema için de bir palet hazırlayalım */
+html[data-theme='light'] {
+    /* Teal Renkleri (Açık) */
+    --teal-light-bg: #f0f7f7;
+    --teal-surface: #ffffff;
+    --teal-primary: #00796b;
+    --teal-secondary: #009688;
+    --teal-text: #004d40;
+    --teal-danger: #f4511e;
+
+    /* Proje değişkenlerini Teal renkleriyle ezelim */
+    --bg-color: var(--teal-light-bg);
+    --text-color: var(--teal-text);
+    --text-color-secondary: #00695c;
+    --text-color-tertiary: #00897b;
+
+    --primary-accent-color: var(--teal-primary);
+    --primary-accent-hover-color: var(--teal-secondary);
+
+    --danger-color: var(--teal-danger);
+    --danger-hover-color: #ff7043;
+    --danger-text-color: var(--teal-danger);
+
+    --surface-1-color: var(--teal-surface);
+    --surface-2-color: #e0f2f1;
+    --surface-3-color: #b2dfdb;
+    --surface-hover-color: #e0f2f1;
+
+    --panel-bg-color: #fafdfd;
+    --switch-bg-color: #b2dfdb;
+
+    --text-shadow: 0 1px 2px rgba(0, 77, 64, 0.1);
+    --overlay-color: rgba(255, 255, 255, 0.1);
+    --modal-bg-overlay: rgba(224, 242, 241, 0.7);
+}
+
+/* 4. Adım: Genel yazı tipini ve bazı ek stilleri değiştirelim */
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Saat ve Selamlama için daha modern bir görünüm */
+#clock {
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+h1 {
+    font-weight: 400;
+}
+
+/* Tüm kutulara daha modern bir köşe verelim */
+.link-box, .modal-content, .panel, .custom-widget-box, #rss-widget-container, .context-menu, .settings-form button, .settings-form input, .settings-form select, .settings-form textarea, #search-input, #search-form button, #autocomplete-suggestions {
+    border-radius: 8px;
+}

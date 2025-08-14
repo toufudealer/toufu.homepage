@@ -1,0 +1,17 @@
+{
+    "manifest_version": 3,
+    "name": "Yeni Sekme Sayfası",
+    "version": "1.0",
+    "description": "Kişiselleştirilebilir yeni sekme sayfası.",
+    "chrome_url_overrides": {
+        "newtab": "index.html"
+    },
+    "permissions": [ "storage", "scripting" ],
+    "host_permissions": [
+        "*://www.google.com/s2/favicons*",
+        "*://*.gstatic.com/*",
+        "*://api.rss2json.com/*",
+        "*://duckduckgo.com/*",
+        "*://www.bing.com/*"
+    ]
+}

@@ -1,0 +1,192 @@
+/*
+ * ========================================
+ *          Kawaii Anime Teması
+ * ========================================
+ * Tatlı, pastel renkler ve yumuşak köşelerle dolu bir dünya!
+ */
+
+/* 1. Adım: Temaya uygun sevimli bir fontu Google Fonts'tan çekelim */
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap');
+
+/* 2. Adım: Koyu tema için pastel renk paletini tanımlayalım */
+html[data-theme='dark'] {
+    --bg-color: #2a2a3e; /* Koyu lavanta */
+    --text-color: #e0e0ff;
+    --text-color-secondary: #b3b3e6;
+    --text-color-tertiary: #8f8faf;
+
+    --primary-accent-color: #ff8fbc; /* Şeker pembe */
+    --primary-accent-hover-color: #ffb3d1;
+
+    --danger-color: #ff758f;
+    --danger-hover-color: #ff9eaf;
+    --danger-text-color: #ff758f;
+
+    --surface-1-color: rgba(68, 68, 99, 0.7); /* Yarı saydam yüzey */
+    --surface-2-color: rgba(85, 85, 119, 0.7);
+    --surface-3-color: rgba(102, 102, 136, 0.7);
+    --surface-hover-color: rgba(85, 85, 119, 0.9);
+
+    --panel-bg-color: #353552;
+    --switch-bg-color: #555577;
+
+    --text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    --overlay-color: rgba(0, 0, 0, 0.1);
+    --modal-bg-overlay: rgba(42, 42, 62, 0.8);
+
+    /* Hava Durumu Efekt Renkleri */
+    --weather-rain-color: 255, 143, 188; /* Şeker pembe */
+    --weather-snow-color: 224, 224, 255; /* Lavanta */
+    --weather-lightning-color: 255, 255, 255;
+}
+
+/* 3. Adım: Açık tema için de bir palet hazırlayalım */
+html[data-theme='light'] {
+    --bg-color: #fff0f5; /* Lavanta pembesi */
+    --text-color: #5c3c4c;
+    --text-color-secondary: #8c6d7b;
+    --text-color-tertiary: #a58d99;
+
+    --primary-accent-color: #ff69b4; /* Parlak pembe */
+    --primary-accent-hover-color: #ff85c1;
+
+    --danger-color: #e64969;
+    --danger-hover-color: #f26b87;
+    --danger-text-color: #e64969;
+
+    --surface-1-color: #ffffff;
+    --surface-2-color: #fff5f8;
+    --surface-3-color: #ffeef2;
+    --surface-hover-color: #ffeef2;
+
+    --panel-bg-color: #fffafa;
+    --switch-bg-color: #ffc0cb; /* Pembe */
+
+    --text-shadow: 0 1px 2px rgba(136, 84, 104, 0.1);
+    --overlay-color: rgba(255, 255, 255, 0.2);
+    --modal-bg-overlay: rgba(255, 192, 203, 0.5);
+
+    /* Hava Durumu Efekt Renkleri */
+    --weather-rain-color: 255, 105, 180; /* Parlak pembe */
+    --weather-snow-color: 92, 60, 76; /* Koyu yazı rengi */
+    --weather-lightning-color: 255, 255, 255;
+}
+
+/* 4. Adım: Genel görünümü değiştirelim */
+body {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size: 24px;'><text y='24'>✨</text></svg>") 4 4, auto;
+}
+
+/* Seçilen metnin rengini temaya uygun hale getirelim */
+::selection {
+    background-color: var(--primary-accent-color);
+    color: var(--bg-color);
+}
+
+/* Tüm kutulara çok yuvarlak köşeler */
+.link-box, .modal-content, .panel, .custom-widget-box, #rss-widget-container, .context-menu, .settings-form button, .settings-form input, .settings-form select, .settings-form textarea, #search-input, #search-form button, #autocomplete-suggestions {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+#search-input, #search-form button {
+    box-shadow: none;
+    border: 1px solid var(--surface-3-color);
+}
+
+/* Hızlı bağlantılara sevimli bir sallanma efekti */
+@keyframes kawaii-wobble {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-3deg) scale(1.05); }
+  75% { transform: rotate(3deg) scale(1.05); }
+}
+
+.link-box:hover {
+    animation: kawaii-wobble 0.5s ease-in-out;
+}
+
+.link-box:not(:hover) {
+    transform: translateY(0); /* Hover bittiğinde orijinal pozisyonuna dön */
+}
+
+/* Butonlara yumuşak bir gölge ve animasyon */
+.settings-form button, .settings-io-buttons button {
+    transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.settings-form button:hover, .settings-io-buttons button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.settings-form button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Saat ve selamlama */
+#clock {
+    font-weight: 700;
+    text-shadow: var(--text-shadow);
+}
+
+h1 {
+    font-weight: 500;
+}
+
+/* Ayarlar butonunu kalple değiştirelim */
+#settings-btn {
+    font-size: 0; /* Orijinal emojiyi gizle */
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+#settings-btn::before {
+    content: '💖';
+    font-size: 1.8rem;
+    transition: transform 0.3s ease;
+}
+
+#settings-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+#settings-btn:hover::before {
+    transform: rotate(15deg);
+}
+
+/* Yüklenme animasyonunu temaya özel hale getirelim */
+.link-box.link-loading {
+    animation: kawaii-spin 1.5s infinite linear;
+    box-shadow: none; /* Orijinal gölgeyi kaldır */
+}
+
+@keyframes kawaii-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Kaydırma çubuğunu temaya uygun hale getirelim */
+.panel-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.panel-content::-webkit-scrollbar-track {
+    background: var(--surface-2-color);
+    border-radius: 10px;
+}
+
+.panel-content::-webkit-scrollbar-thumb {
+    background-color: var(--primary-accent-color);
+    border-radius: 10px;
+    border: 2px solid var(--surface-2-color);
+}

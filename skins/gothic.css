@@ -1,0 +1,148 @@
+/*
+ * ========================================
+ *          Gothic Night Teması
+ * ========================================
+ * "Karanlık çöktüğünde, stil ortaya çıkar."
+ */
+
+/* 1. Adım: Temaya uygun bir fontu Google Fonts'tan çekelim */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600&display=swap');
+
+/* 2. Adım: Koyu tema için gotik renk paletini tanımlayalım */
+html[data-theme='dark'] {
+    /* Gotik Renkler */
+    --gothic-bg: #1a1a1a;
+    --gothic-surface: #2b2b2b;
+    --gothic-text: #dcdcdc;
+    --gothic-red: #8B0000; /* DarkRed */
+    --gothic-danger: #B22222; /* FireBrick */
+    --gothic-accent: #4a0e0e;
+
+    /* Proje değişkenlerini Gotik renkleriyle ezelim */
+    --bg-color: var(--gothic-bg);
+    --text-color: var(--gothic-text);
+    --text-color-secondary: #a0a0a0;
+    --text-color-tertiary: #7a7a7a;
+
+    --primary-accent-color: var(--gothic-red);
+    --primary-accent-hover-color: #a52a2a; /* Brown */
+
+    --danger-color: var(--gothic-danger);
+    --danger-hover-color: #cd5c5c; /* IndianRed */
+    --danger-text-color: var(--gothic-danger);
+
+    --surface-1-color: var(--gothic-surface);
+    --surface-2-color: #3c3c3c;
+    --surface-3-color: #4d4d4d;
+    --surface-hover-color: #3c3c3c;
+
+    --panel-bg-color: #222222;
+    --switch-bg-color: var(--gothic-surface);
+    --switch-checked-bg-color: var(--gothic-accent);
+
+    --text-shadow: 0 1px 5px rgba(0, 0, 0, 0.7);
+    --overlay-color: rgba(0, 0, 0, 0.5);
+    --modal-bg-overlay: rgba(26, 26, 26, 0.85);
+
+    /* Hava Durumu Efekt Renkleri */
+    --weather-rain-color: 160, 160, 160;
+    --weather-snow-color: 220, 220, 220;
+    --weather-lightning-color: 205, 92, 92; /* IndianRed */
+}
+
+/* 3. Adım: Açık tema için de bir palet hazırlayalım (Parchment/Yazıt Stili) */
+html[data-theme='light'] {
+    /* Gotik Renkler (Açık Tema) */
+    --gothic-bg-light: #fdf5e6; /* OldLace */
+    --gothic-text-light: #3a2d22;
+    --gothic-red: #8B0000;
+    --gothic-danger: #B22222;
+
+    /* Proje değişkenlerini Gotik renkleriyle ezelim */
+    --bg-color: var(--gothic-bg-light);
+    --text-color: var(--gothic-text-light);
+    --text-color-secondary: #5c4a3d;
+    --text-color-tertiary: #8b7e71;
+
+    --primary-accent-color: var(--gothic-red);
+    --primary-accent-hover-color: #a52a2a;
+
+    --danger-color: var(--gothic-danger);
+    --danger-hover-color: #cd5c5c;
+    --danger-text-color: var(--gothic-danger);
+
+    --surface-1-color: #fffaf0; /* FloralWhite */
+    --surface-2-color: #f5f0e8;
+    --surface-3-color: #e8e0d4;
+    --surface-hover-color: #f5f0e8;
+
+    --panel-bg-color: #faf5ed;
+    --switch-bg-color: #e8e0d4;
+    --switch-checked-bg-color: var(--gothic-red);
+
+    --text-shadow: 0 1px 1px rgba(58, 45, 34, 0.2);
+    --overlay-color: rgba(253, 245, 230, 0.2);
+    --modal-bg-overlay: rgba(253, 245, 230, 0.7);
+
+    /* Hava Durumu Efekt Renkleri */
+    --weather-rain-color: 92, 74, 61;
+    --weather-snow-color: 58, 45, 34;
+    --weather-lightning-color: 255, 250, 250; /* Snow */
+}
+
+/* 4. Adım: Genel yazı tipini ve bazı ek stilleri değiştirelim */
+body {
+    font-family: 'Crimson Text', serif;
+}
+
+/* Saat ve Selamlama */
+#clock {
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+    font-weight: 400;
+    color: var(--primary-accent-color);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Tüm kutulara keskin köşeler ve ince bir çerçeve */
+.link-box, .modal-content, .panel, .custom-widget-box, #rss-widget-container, .context-menu, .settings-form button, .settings-form input, .settings-form select, .settings-form textarea, #search-form, #autocomplete-suggestions {
+    border-radius: 2px; /* Çok hafif yuvarlaklık */
+    border: 1px solid var(--surface-3-color);
+}
+
+/* Arama çubuğu */
+#search-input, #search-form button {
+    border: none;
+    background-color: var(--surface-1-color);
+}
+
+/* Butonlar */
+.settings-form button, .settings-io-buttons button, .modal-content form button {
+    background-color: var(--primary-accent-color);
+    color: #f0f0f0;
+    border: 1px solid #5a0000;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+.settings-form button:hover, .settings-io-buttons button:hover, .modal-content form button:hover {
+    background-color: var(--primary-accent-hover-color);
+}
+
+.danger-btn {
+    background-color: var(--danger-color) !important;
+    border-color: #7a1717 !important;
+}
+.danger-btn:hover {
+    background-color: var(--danger-hover-color) !important;
+}
+
+/* Hızlı bağlantılar */
+.link-box:hover {
+    transform: none;
+    box-shadow: 0 0 8px var(--primary-accent-color);
+}

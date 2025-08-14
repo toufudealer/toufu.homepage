@@ -1,0 +1,112 @@
+/*
+ * ========================================
+ *          Synthwave '84 Teması
+ * ========================================
+ * Neon ışıkları ve retro-fütüristik bir his için.
+ * Bu kodu kopyalayıp ayarlardaki "Özel Tema (CSS)" kutusuna yapıştırın.
+ */
+
+/* 1. Adım: Temaya uygun bir fontu Google Fonts'tan çekelim */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+
+/* 2. Adım: Sadece koyu tema aktifken geçerli olacak değişkenleri ezelim */
+html[data-theme='dark'] {
+    /* Ana Renkler */
+    --bg-color: #1e1a34; /* Koyu mor-mavi arka plan */
+    --text-color: #e0e0e0;
+    --text-color-secondary: #a9a3d4;
+    --primary-accent-color: #ff00c1; /* Canlı pembe */
+    --primary-accent-hover-color: #ff5fdc;
+    --danger-color: #ff3366;
+    --danger-hover-color: #ff6699;
+    --danger-text-color: #ff3366;
+
+    /* Yüzey Renkleri (Kutular, paneller vb.) */
+    --surface-1-color: rgba(42, 36, 77, 0.7); /* Yarı saydam kutular */
+    --surface-2-color: rgba(58, 52, 102, 0.7);
+    --surface-3-color: rgba(75, 68, 130, 0.7);
+    --surface-hover-color: rgba(75, 68, 130, 0.9);
+    --panel-bg-color: #1a162f;
+
+    /* Efektler */
+    --overlay-color: rgba(18, 16, 36, 0.4);
+    --text-shadow: 0 0 5px rgba(255, 0, 193, 0.4), 0 0 10px rgba(255, 0, 193, 0.3);
+    --link-loading-shadow-color: rgba(255, 0, 193, 0.6);
+
+    /* Diğer Bileşenler */
+    --switch-bg-color: #4b4282;
+    --modal-bg-overlay: rgba(30, 26, 52, 0.8);
+
+    /* Hava Durumu Efekt Renkleri */
+    --weather-rain-color: 255, 0, 193; /* Canlı pembe */
+    --weather-snow-color: 169, 163, 212; /* text-color-secondary */
+    --weather-lightning-color: 255, 255, 255;
+}
+
+/* 3. Adım: Açık tema için de bir palet hazırlayalım */
+html[data-theme='light'] {
+    /* Ana Renkler (Açık Synthwave) */
+    --bg-color: #f0f0ff; /* Açık lavanta */
+    --text-color: #3c1e70; /* Koyu mor yazı */
+    --text-color-secondary: #5a3d9a;
+    --text-color-tertiary: #7b6aae;
+    --primary-accent-color: #e91e9f; /* Canlı pembe */
+    --primary-accent-hover-color: #c71585;
+    --danger-color: #d9305a;
+    --danger-hover-color: #b0264f;
+    --danger-text-color: #d9305a;
+
+    /* Yüzey Renkleri */
+    --surface-1-color: #ffffff;
+    --surface-2-color: #f8f8ff;
+    --surface-3-color: #e8e8ff;
+    --surface-hover-color: #e8e8ff;
+    --panel-bg-color: #fdfdff;
+
+    /* Efektler */
+    --overlay-color: rgba(255, 255, 255, 0.2);
+    --text-shadow: 0 1px 2px rgba(60, 30, 112, 0.15);
+    --link-loading-shadow-color: rgba(233, 30, 159, 0.5);
+    --modal-bg-overlay: rgba(240, 240, 255, 0.7);
+
+    /* Hava Durumu Efekt Renkleri */
+    --weather-rain-color: 233, 30, 159; /* Canlı pembe */
+    --weather-snow-color: 60, 30, 112; /* Koyu mor yazı */
+    --weather-lightning-color: 255, 255, 255;
+}
+
+/* 3. Adım: Genel yazı tipini ve bazı ek stilleri değiştirelim */
+body {
+    font-family: 'Fira Code', monospace; /* Yeni fontu uygula */
+}
+
+/* Saat için özel bir neon efekti */
+#clock {
+    font-weight: 500;
+    text-shadow:
+        0 0 5px #fff,
+        0 0 10px #fff,
+        0 0 20px var(--primary-accent-color),
+        0 0 30px var(--primary-accent-color),
+        0 0 40px var(--primary-accent-color);
+}
+
+/* Hızlı bağlantı kutularına ince bir çerçeve ekleyelim */
+.link-box {
+    border: 1px solid rgba(255, 0, 193, 0.2);
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.link-box:hover {
+    box-shadow: 0 0 15px rgba(255, 0, 193, 0.5);
+}
+
+/* Ayarlar panelindeki butonlara da biraz stil verelim */
+.settings-form button {
+    border-radius: 0; /* Daha keskin köşeler */
+}
+
+/* Arama çubuğunu daha belirgin yapalım */
+#search-input {
+    border-color: rgba(255, 0, 193, 0.3);
+}

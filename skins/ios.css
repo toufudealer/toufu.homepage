@@ -1,0 +1,224 @@
+/*
+ * ========================================
+ *              iOS Stili Tema
+ * ========================================
+ * Temiz, modern ve yarı saydam arayüzler.
+ */
+
+/* 1. Adım: Fontu sistemin varsayılanına bırakarak en doğal görünümü elde edelim. */
+/* Bu yüzden @import kullanmıyoruz. */
+
+/* 2. Adım: Koyu tema için renk paletini tanımlayalım (iOS Dark Mode) */
+html[data-theme='dark'] {
+    /* iOS Renkleri (Koyu) */
+    --ios-blue: #0A84FF;
+    --ios-red: #FF453A;
+    --ios-green: #30D158;
+    --ios-bg: #1C1C1E;
+    --ios-surface-1: #2C2C2E;
+    --ios-surface-2: #3A3A3C;
+    --ios-text-primary: rgba(255, 255, 255, 0.95);
+    --ios-text-secondary: rgba(235, 235, 245, 0.6);
+    --ios-text-tertiary: rgba(235, 235, 245, 0.3);
+
+    /* Proje değişkenlerini iOS renkleriyle ezelim */
+    --bg-color: var(--ios-bg);
+    --text-color: var(--ios-text-primary);
+    --text-color-secondary: var(--ios-text-secondary);
+    --text-color-tertiary: var(--ios-text-tertiary);
+
+    --primary-accent-color: var(--ios-blue);
+    --primary-accent-hover-color: #3399FF;
+
+    --danger-color: var(--ios-red);
+    --danger-hover-color: #FF6961;
+    --danger-text-color: var(--ios-red);
+    --danger-bg-hover-color: rgba(255, 69, 58, 0.2);
+
+    --surface-1-color: var(--ios-surface-1);
+    --surface-2-color: var(--ios-surface-2);
+    --surface-3-color: #48484A;
+    --surface-hover-color: var(--ios-surface-2);
+
+    --panel-bg-color: rgba(28, 28, 30, 0.75); /* Buzlu cam efekti */
+    --switch-bg-color: #39393D;
+    --switch-checked-bg-color: var(--ios-green);
+
+    --text-shadow: none;
+    --overlay-color: rgba(0, 0, 0, 0.3);
+    --modal-bg-overlay: rgba(0, 0, 0, 0.4);
+
+    /* Hava Durumu Efekt Renkleri */
+    --weather-rain-color: 235, 235, 245;
+    --weather-snow-color: 255, 255, 255;
+    --weather-lightning-color: 255, 255, 255;
+}
+
+/* 3. Adım: Açık tema için de bir palet hazırlayalım (iOS Light Mode) */
+html[data-theme='light'] {
+    /* iOS Renkleri (Açık) */
+    --ios-blue: #007AFF;
+    --ios-red: #FF3B30;
+    --ios-green: #34C759;
+    --ios-bg: #F2F2F7;
+    --ios-surface-1: #FFFFFF;
+    --ios-surface-2: #E5E5EA;
+    --ios-text-primary: #000000;
+    --ios-text-secondary: rgba(60, 60, 67, 0.6);
+    --ios-text-tertiary: rgba(60, 60, 67, 0.3);
+
+    /* Proje değişkenlerini iOS renkleriyle ezelim */
+    --bg-color: var(--ios-bg);
+    --text-color: var(--ios-text-primary);
+    --text-color-secondary: var(--ios-text-secondary);
+    --text-color-tertiary: var(--ios-text-tertiary);
+
+    --primary-accent-color: var(--ios-blue);
+    --primary-accent-hover-color: #0062CC;
+
+    --danger-color: var(--ios-red);
+    --danger-hover-color: #FD5B53;
+    --danger-text-color: var(--ios-red);
+    --danger-bg-hover-color: rgba(255, 59, 48, 0.1);
+
+    --surface-1-color: var(--ios-surface-1);
+    --surface-2-color: #F2F2F7;
+    --surface-3-color: var(--ios-surface-2);
+    --surface-hover-color: var(--ios-surface-2);
+
+    --panel-bg-color: rgba(248, 248, 248, 0.85); /* Buzlu cam efekti */
+    --switch-bg-color: #E9E9EB;
+    --switch-checked-bg-color: var(--ios-green);
+
+    --text-shadow: none;
+    --overlay-color: rgba(0, 0, 0, 0.05);
+    --modal-bg-overlay: rgba(0, 0, 0, 0.3);
+
+    /* Hava Durumu Efekt Renkleri */
+    --weather-rain-color: 60, 60, 67;
+    --weather-snow-color: 0, 0, 0;
+    --weather-lightning-color: 255, 255, 255;
+}
+
+/* 4. Adım: Genel görünümü değiştirelim */
+body {
+    /* Sistem fontunu kullanarak en doğal iOS hissini yakala */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Genel geçiş efekti */
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Saat ve Selamlama için daha ince bir görünüm */
+#clock, h1 {
+    font-weight: 400;
+}
+
+/* Tüm kutulara iOS stili yuvarlak köşeler */
+.link-box, .modal-content, .panel, .custom-widget-box, #rss-widget-container, .context-menu, .settings-form button, .settings-form input, .settings-form select, .settings-form textarea, #autocomplete-suggestions {
+    border-radius: 12px;
+    border: none;
+}
+
+/* Arama çubuğu ve butonları */
+#search-form {
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex; /* Flexbox ile hizalama */
+    align-items: center;
+}
+#search-input, #search-form button {
+    border: none;
+    background: transparent;
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+#search-input {
+    flex-grow: 1; /* Input alanını genişlet */
+}
+#search-input:focus {
+    outline: none;
+}
+#search-form button {
+    color: var(--primary-accent-color);
+    font-weight: 500;
+    flex-shrink: 0; /* Butonun küçülmesini engelle */
+}
+
+/* Buzlu cam efekti (Frosted Glass) */
+/* Bu efekti alacak tüm ana konteynerlere uygula */
+.panel, .modal-content, #rss-widget-container, .context-menu, #autocomplete-suggestions, #search-form {
+    background-color: var(--panel-bg-color) !important; /* Yarı saydam arka planı zorunlu kıl */
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+/* Butonlara iOS hissi verelim */
+.settings-form button, .settings-io-buttons button, .modal-content form button {
+    font-weight: 500;
+    background-color: var(--primary-accent-color);
+    color: white;
+    transition: filter 0.2s ease-out; /* Geçişi yumuşat */
+}
+.settings-form button:hover, .settings-io-buttons button:hover, .modal-content form button:hover {
+    filter: brightness(1.1);
+}
+.danger-btn {
+    background-color: var(--danger-color) !important;
+}
+.danger-btn:hover {
+    background-color: var(--danger-color) !important;
+    filter: brightness(1.1);
+}
+
+/* iOS Toggle Switch */
+.switch {
+    width: 51px;
+    height: 31px;
+}
+.slider {
+    background-color: var(--switch-bg-color);
+    transition: background-color 0.2s ease-out;
+}
+.slider:before {
+    height: 27px;
+    width: 27px;
+    left: 2px;
+    bottom: 2px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); /* Zıplama efekti */
+}
+input:checked + .slider {
+    background-color: var(--switch-checked-bg-color);
+}
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+.slider.round {
+    border-radius: 34px;
+}
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Ayarlar paneli inputları */
+.settings-form input, .settings-form select, .settings-form textarea {
+    background-color: var(--surface-2-color);
+    border: 1px solid var(--surface-3-color);
+}
+
+/* Hızlı bağlantılar */
+.link-box {
+    background-color: var(--surface-1-color);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.link-box:hover {
+    transform: translateY(0); /* iOS'te hover'da kalkma efekti pek olmaz */
+    filter: brightness(0.95);
+}
+html[data-theme='light'] .link-box:hover {
+    filter: brightness(0.98);
+}
