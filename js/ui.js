@@ -462,6 +462,25 @@ export function initializeDragAndDrop() {
     }
 }
 
+export function initializeCustomWidgetDragAndDrop() {
+    if (dom.customWidgetArea) {
+        new Sortable(dom.customWidgetArea, {
+            animation: 150,
+            // Custom widgets are identified by their .custom-widget-box class
+            draggable: '.custom-widget-box',
+            onEnd: (evt) => {
+                if (evt.oldIndex !== evt.newIndex) {
+                    let customWidgets = storage.getCustomWidgets();
+                    const [movedWidget] = customWidgets.splice(evt.oldIndex, 1);
+                    customWidgets.splice(evt.newIndex, 0, movedWidget);
+                    storage.saveCustomWidgets(customWidgets);
+                    // No need to re-render, Sortable.js already updated the DOM
+                }
+            }
+        });
+    }
+}
+
 export function openModal(modalElement) {
     modalElement.classList.add('is-open');
 }

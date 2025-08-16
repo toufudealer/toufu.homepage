@@ -369,6 +369,7 @@ async function initializeApp() {
 
     ui.loadAndRenderLinks();
     ui.initializeDragAndDrop();
+    ui.initializeCustomWidgetDragAndDrop();
 
     rss.initializeRss();
 

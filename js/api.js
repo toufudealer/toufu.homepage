@@ -71,7 +71,7 @@ export async function fetchWeather() {
     // Open-Meteo'nun `current_weather=true` parametresi kullanımdan kaldırılmıştır.
     // Bunun yerine `current` parametresi ile istenen veriler belirtilmelidir.
     // Bu değişiklik, API'nin gelecekteki sürümleriyle uyumluluğu artırır ve olası hataları önler.
-    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto`;
+    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset&timezone=auto&forecast_days=7`;
     const weatherResponse = await fetch(weatherUrl);
     if (!weatherResponse.ok) throw new Error('Hava durumu verisi alınamadı.');
     const weatherData = await weatherResponse.json();
