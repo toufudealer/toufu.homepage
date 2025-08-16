@@ -590,6 +590,15 @@ export function toggleSettingsPanel() {
     dom.settingsPanel.classList.toggle('open');
 }
 
+export function toggleRssWidgetExpansion() {
+    dom.rssWidgetContainer.classList.toggle('expanded');
+    if (dom.rssWidgetContainer.classList.contains('expanded')) {
+        dom.rssExpandBtn.textContent = 'v'; // Down arrow
+    } else {
+        dom.rssExpandBtn.textContent = '^'; // Up arrow
+    }
+}
+
 export function initializeSettingsUI() {
     populateCountrySelect();
 

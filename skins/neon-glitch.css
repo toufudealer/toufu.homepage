@@ -1,0 +1,282 @@
+/* skins/neon-glitch.css */
+
+:root {
+    --bg-color: #1a001a;
+    --text-color: #00ff00;
+    --accent-color: #ff00ff;
+    --link-color: #00ffff;
+    --input-bg: #330033;
+    --input-border: #00ff00;
+    --button-bg: #ff00ff;
+    --button-text: #ffffff;
+    --panel-bg: rgba(26, 0, 26, 0.9);
+    --panel-border: #00ff00;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Press Start 2P', cursive, monospace;
+    text-shadow: 0 0 5px var(--text-color);
+}
+
+/* General text and elements */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--accent-color);
+    text-shadow: 0 0 8px var(--accent-color);
+}
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+    text-shadow: 0 0 5px var(--link-color);
+}
+
+a:hover {
+    color: var(--accent-color);
+    text-shadow: 0 0 10px var(--accent-color);
+}
+
+/* Search bar */
+#search-input {
+    background-color: var(--input-bg);
+    border: 2px solid var(--input-border);
+    color: var(--text-color);
+    box-shadow: 0 0 10px var(--input-border);
+}
+
+#search-input::placeholder {
+    color: rgba(0, 255, 0, 0.7);
+}
+
+#search-form button {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: 2px solid var(--button-bg);
+    box-shadow: 0 0 10px var(--button-bg);
+}
+
+/* Quick Links */
+.link-box {
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-color);
+    box-shadow: 0 0 5px var(--input-input-border);
+}
+
+.link-box:hover {
+    background-color: var(--accent-color);
+    color: var(--button-text);
+    box-shadow: 0 0 15px var(--accent-color);
+}
+
+/* Settings Panel */
+#settings-panel {
+    background-color: var(--panel-bg);
+    border: 2px solid var(--panel-border);
+    box-shadow: 0 0 20px var(--panel-border);
+}
+
+#settings-panel .settings-header {
+    color: var(--accent-color);
+    text-shadow: 0 0 8px var(--accent-color);
+}
+
+/* Buttons */
+button {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: 1px solid var(--button-bg);
+    box-shadow: 0 0 5px var(--button-bg);
+}
+
+button:hover {
+    background-color: var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-color);
+}
+
+/* Glitch Effect (subtle) */
+@keyframes glitch-text {
+    0% { text-shadow: 0 0 5px var(--text-color); transform: translateX(0); }
+    20% { text-shadow: 0 0 6px var(--text-color), 2px 0 0 var(--accent-color); transform: translateX(-1px); }
+    40% { text-shadow: 0 0 5px var(--text-color); transform: translateX(0); }
+    60% { text-shadow: 0 0 6px var(--text-color), -2px 0 0 var(--link-color); transform: translateX(1px); }
+    80% { text-shadow: 0 0 5px var(--text-color); transform: translateX(0); }
+    100% { text-shadow: 0 0 5px var(--text-color); transform: translateX(0); }
+}
+
+body, #search-input, .link-box, button {
+    animation: glitch-text 10s infinite alternate;
+}
+
+/* Specific elements for glitch */
+#clock, #greeting {
+    animation: glitch-text 8s infinite alternate;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 5px;
+    border: 1px solid var(--link-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--link-color);
+}
+
+/* Modals */
+.modal-content {
+    background-color: var(--panel-bg);
+    border: 2px solid var(--panel-border);
+    box-shadow: 0 0 20px var(--panel-border);
+}
+
+.modal-content h2 {
+    color: var(--accent-color);
+    text-shadow: 0 0 8px var(--accent-color);
+}
+
+.modal-content input[type="text"], .modal-content input[type="url"], .modal-content select, .modal-content textarea {
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-color);
+}
+
+.modal-content button {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+}
+
+/* RSS Widget */
+#rss-widget-container {
+    background-color: var(--panel-bg);
+    border: 2px solid var(--panel-border);
+    box-shadow: 0 0 15px var(--panel-border);
+}
+
+#rss-widget-container .rss-tabs button {
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    border: 1px solid var(--input-border);
+}
+
+#rss-widget-container .rss-tabs button.active {
+    background-color: var(--accent-color);
+    color: var(--button-text);
+}
+
+#rss-widget-container .rss-item {
+    border-bottom: 1px dashed var(--input-border);
+}
+
+#rss-widget-container .rss-item a {
+    color: var(--link-color);
+}
+
+#rss-widget-container .rss-item a:hover {
+    color: var(--accent-color);
+}
+
+/* Weather Widget */
+#weather-container {
+    color: var(--accent-color);
+    text-shadow: 0 0 8px var(--accent-color);
+}
+
+#weather-modal .forecast-day {
+    border-bottom: 1px dashed var(--input-border);
+}
+
+#weather-modal .forecast-day .day-name {
+    color: var(--text-color);
+}
+
+#weather-modal .forecast-day .temps .high {
+    color: var(--accent-color);
+}
+
+#weather-modal .forecast-day .temps .low {
+    color: var(--link-color);
+}
+
+/* Context Menu */
+#context-menu {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    box-shadow: 0 0 10px var(--panel-border);
+}
+
+#context-menu button {
+    background: none;
+    border: none;
+    color: var(--text-color);
+}
+
+#context-menu button:hover {
+    background-color: var(--accent-color);
+    color: var(--button-text);
+}
+
+/* Custom Widgets */
+.custom-widget-box {
+    background-color: var(--panel-bg);
+    border: 2px solid var(--panel-border);
+    box-shadow: 0 0 15px var(--panel-border);
+}
+
+.custom-widget-box h3 {
+    color: var(--accent-color);
+    text-shadow: 0 0 8px var(--accent-color);
+}
+
+.custom-widget-box iframe {
+    border: 1px solid var(--input-border);
+}
+
+/* Settings list items */
+.settings-list-item {
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-color);
+}
+
+.settings-list-item button {
+    background-color: var(--button-bg);
+    color: var(--button-text);
+}
+
+.settings-list-item button:hover {
+    background-color: var(--accent-color);
+}
+
+/* Theme preview textarea */
+#custom-css-input {
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-color);
+}
+
+/* Toggle switches */
+.switch input:checked + .slider {
+    background-color: var(--accent-color);
+}
+
+.switch input:focus + .slider {
+    box-shadow: 0 0 1px var(--accent-color);
+}
+
+.switch input:checked + .slider:before {
+    background-color: var(--button-text);
+}
+
+/* Add a custom font import for the glitch theme */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');

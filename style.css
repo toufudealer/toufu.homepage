@@ -929,10 +929,41 @@ h1 {
     max-height: 35vh; /* Yüksekliği ekranın %35'i ile sınırla */
     display: flex;
     flex-direction: column;
+    transition: max-height 0.3s ease-out, padding-bottom 0.3s ease-out;
+}
+
+#rss-widget-container.expanded {
+    max-height: 80vh; /* Genişletilmiş yükseklik */
+    padding-bottom: 40px; /* Buton için boşluk */
 }
 
 #rss-widget-container.hidden {
     display: none;
+}
+
+.rss-expand-button {
+    position: absolute;
+    bottom: 5px; /* Adjust as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--surface-3-color);
+    color: var(--text-color-secondary);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s, color 0.2s;
+    z-index: 11; /* Above the RSS container */
+}
+
+.rss-expand-button:hover {
+    background-color: var(--surface-hover-color);
+    color: var(--text-color);
 }
 
 .rss-header-container {
@@ -949,6 +980,7 @@ h1 {
     gap: 10px;
     overflow-x: auto;
     flex-grow: 1;
+    margin-right: 25px;
 }
 
 #rss-tabs.hidden {
@@ -989,7 +1021,7 @@ h1 {
     display: flex;
     color: var(--text-color-secondary);
     text-decoration: none;
-    padding: 8px 0;
+    padding: 12px 0;
     border-bottom: 1px solid var(--surface-2-color);
     transition: color 0.2s;
     gap: 12px;
@@ -1045,6 +1077,7 @@ h1 {
     cursor: pointer;
     padding: 0 5px;
     transition: color 0.2s, transform 0.2s;
+    margin-left: 3px;
 }
 
 #rss-refresh-btn:hover {
@@ -1072,7 +1105,7 @@ h1 {
 
 /* RSS içeriği için kaydırma çubuğu */
 #rss-content::-webkit-scrollbar {
-    width: 6px;
+    width: 7px;
 }
 
 #rss-content::-webkit-scrollbar-track {
@@ -1085,6 +1118,24 @@ h1 {
 }
 
 #rss-content::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover-color);
+}
+
+/* RSS sekmeleri için kaydırma çubuğu */
+#rss-tabs::-webkit-scrollbar {
+    height: 4px; /* Daha ince bir kaydırma çubuğu */
+}
+
+#rss-tabs::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#rss-tabs::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb-color);
+    border-radius: 2px; /* Daha küçük bir radius */
+}
+
+#rss-tabs::-webkit-scrollbar-thumb:hover {
     background-color: var(--scrollbar-thumb-hover-color);
 }
 

@@ -24,6 +24,7 @@ export const rssTabs = document.getElementById('rss-tabs');
 export const rssRefreshBtn = document.getElementById('rss-refresh-btn');
 export const rssTitle = document.getElementById('rss-title');
 export const rssContent = document.getElementById('rss-content');
+export const rssExpandBtn = document.getElementById('rss-expand-btn');
 export const settingsPanel = document.getElementById('settings-panel');
 export const closeSettingsBtn = document.getElementById('close-settings-btn');
 export const locationForm = document.getElementById('location-form');

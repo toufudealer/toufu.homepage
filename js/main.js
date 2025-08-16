@@ -93,6 +93,9 @@ function addEventListeners() {
             ui.renderWeatherModal();
         }
     });
+    if (dom.rssExpandBtn) {
+        dom.rssExpandBtn.addEventListener('click', ui.toggleRssWidgetExpansion);
+    }
 
     // Close modals/panels when clicking outside
     window.addEventListener('click', (event) => {
