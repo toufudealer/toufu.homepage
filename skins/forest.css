@@ -1,0 +1,41 @@
+/* Forest Theme */
+:root {
+    --bg-color: #2E402D; /* Dark forest green */
+    --text-color: #E0E8E0; /* Light grey-green */
+    --text-color-secondary: #B0C4B1; /* Muted green */
+    --text-color-tertiary: #8A9A8B; /* Darker muted green */
+    --primary-accent-color: #6B8E23; /* Olive green */
+    --primary-accent-hover-color: #55701C; /* Darker olive green */
+    --danger-color: #A0522D; /* Sienna */
+    --danger-hover-color: #8B4513; /* Saddle Brown */
+    --danger-text-color: #FFDAB9; /* Peach Puff */
+    --danger-text-hover-color: #FFC0CB; /* Pink */
+    --danger-bg-hover-color: rgba(160, 82, 45, 0.2); /* Transparent Sienna */
+    --surface-1-color: #3A4F39; /* Slightly lighter forest green */
+    --surface-2-color: #4A6049; /* Medium forest green */
+    --surface-3-color: #5A7059; /* Lighter forest green */
+    --surface-hover-color: #4F654E; /* Hover state for surfaces */
+    --overlay-color: rgba(0, 0, 0, 0.4); /* Dark overlay */
+    --text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    --panel-bg-color: #354834; /* Panel background */
+    --switch-bg-color: #708090; /* Slate Gray */
+    --switch-disabled-bg-color: #5A6A7A; /* Darker Slate Gray */
+    --scrollbar-thumb-color: #6B8E23; /* Olive green */
+    --scrollbar-thumb-hover-color: #55701C; /* Darker olive green */
+    --link-loading-shadow-color: rgba(107, 142, 35, 0.5); /* Transparent Olive green */
+    --rss-tab-bg: rgba(107, 142, 35, 0.1); /* Transparent Olive green */
+    --rss-tab-hover-bg: rgba(107, 142, 35, 0.3); /* More transparent Olive green */
+    --custom-widget-bg: rgba(46, 64, 45, 0.5); /* Transparent forest green */
+    --modal-bg-overlay: rgba(0,0,0,0.7);
+    --folder-preview-icon-bg: rgba(255, 255, 255, 0.08);
+
+    /* Weather Effects Colors (Forest specific) */
+    --weather-rain-color: 150, 170, 150; /* Muted green-grey rain */
+    --weather-snow-color: 220, 230, 220; /* Off-white snow */
+    --weather-lightning-color: 255, 255, 200; /* Pale yellow lightning */
+}
+
+html[data-theme='forest'] {
+    /* No specific light mode for this theme, it's designed to be dark */
+    /* If a light mode is desired, define light variables here */
+}
