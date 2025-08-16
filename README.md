@@ -24,6 +24,10 @@ toufu.homepage, tarayıcınızın her yeni sekmesini, ihtiyaçlarınıza göre �
   - **Ayarları İçe/Dışa Aktarma:** Tüm ayarlarınızı (bağlantılar, temalar, RSS akışları vb.) tek bir JSON dosyası ile yedekleyin veya başka bir cihazdan geri yükleyin.
   - **Performanslı Depolama:** Ayarlar için `localStorage`, büyük veriler (resimler, temalar, önbellek) için ise `IndexedDB` kullanılarak yüksek performans sağlanır.
 
+- **Çoklu Dil Desteği:**
+  - Türkçe, İngilizce, Almanca ve Japonca dilleri arasında geçiş yapma imkanı.
+  - Tarayıcı dilini otomatik olarak algılayarak başlangıç dilini ayarlar.
+
 - **Gelişmiş Arama Çubuğu:**
   - Google, DuckDuckGo, Bing ve Yandex gibi popüler arama motorları arasında seçim yapma.
   - Arama yaparken otomatik tamamlama önerileri ve **arama geçmişi**.
