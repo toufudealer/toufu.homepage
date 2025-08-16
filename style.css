@@ -568,8 +568,8 @@ h1 {
 .panel {
     position: fixed;
     top: 0;
-    right: -320px; /* Başlangıçta ekranın dışında */
-    width: 300px;
+    right: -370px; /* Başlangıçta ekranın dışında */
+    width: 350px;
     height: 100%;
     background-color: var(--panel-bg-color);
     box-shadow: var(--text-shadow);
@@ -689,11 +689,14 @@ h1 {
 
 .theme-management-controls {
     display: flex;
+    flex-direction: column;
     gap: 10px;
 }
 
 .theme-management-controls select {
     flex-grow: 1;
+    min-width: 150px; /* Temalar butonunun metninin görünürlüğünü sağlamak için minimum genişlik */
+    width: 100%; /* Yeni satırda tam genişlik */
 }
 
 .theme-management-controls button {
@@ -701,6 +704,7 @@ h1 {
     /* width: 40px; */ /* Genişliği içeriğe göre ayarlanacak şekilde kaldırıldı */
     margin-top: 0;
     padding: 8px 12px; /* İçeriğe daha iyi uyum için padding ayarlandı */
+    width: 100%; /* Yeni satırda tam genişlik */
 }
 
 #custom-css-input:read-only {
