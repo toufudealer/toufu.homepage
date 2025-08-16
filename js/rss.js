@@ -1,5 +1,6 @@
 import * as dom from './dom.js';
 import * as storage from './storage.js';
+import * as i18n from './i18n.js';
 
 const API_URL = 'https://api.rss2json.com/v1/api.json?rss_url=';
 const CACHE_DURATION_MS = 30 * 60 * 1000; // 30 dakika
@@ -25,14 +26,14 @@ async function fetchAndParseRss(feedUrl, forceRefresh = false) {
     // Önbellekte yoksa veya süresi dolmuşsa, rss2json API'si üzerinden çek
     try {
         const response = await fetch(`${API_URL}${encodeURIComponent(feedUrl)}`);
-        if (!response.ok) throw new Error(`Ağ yanıtı başarısız oldu (HTTP Kodu: ${response.status})`);
+        if (!response.ok) throw new Error(i18n.translate('network_error', { status: response.status }));
 
         const data = await response.json();
         if (data.status !== 'ok') {
-            throw new Error(data.message || "API'den geçersiz yanıt alındı.");
+            throw new Error(data.message || i18n.translate('invalid_api_response'));
         }
 
-        const title = data.feed.title || 'RSS Akışı';
+        const title = data.feed.title || i18n.translate('rss_feed_default_title');
         const items = data.items.map(item => ({
             title: item.title || '',
             link: item.link || '',
@@ -52,7 +53,7 @@ async function fetchAndParseRss(feedUrl, forceRefresh = false) {
     } catch (error) {
         // Hata durumunda promise'i reject ederek çağıran fonksiyona bildir.
         // Bu, daha iyi hata yönetimi sağlar.
-        console.error(`RSS akışı ayrıştırılırken hata oluştu (${feedUrl}):`, error);
+        console.error(i18n.translate('rss_parse_error', { feedUrl: feedUrl }), error);
         throw error;
     }
 }
@@ -62,9 +63,9 @@ async function fetchAndParseRss(feedUrl, forceRefresh = false) {
  * @param {object} feedData - Ayrıştırılmış RSS verisi.
  * @param {string} [errorMessage] - Hata durumunda gösterilecek mesaj.
  */
-function renderContent(feedData, errorMessage = 'RSS akışı yüklenemedi veya boş.') {
+function renderContent(feedData, errorMessage = i18n.translate('rss_load_error_empty')) {
     if (!feedData || !feedData.items || feedData.items.length === 0) {
-        dom.rssTitle.textContent = activeFeed ? activeFeed.name : 'Hata';
+        dom.rssTitle.textContent = activeFeed ? activeFeed.name : i18n.translate('error');
         dom.rssContent.innerHTML = `<div class="rss-item-source">${errorMessage}</div>`;
         return;
     }
@@ -105,17 +106,17 @@ function renderContent(feedData, errorMessage = 'RSS akışı yüklenemedi veya 
  * @param {boolean} [forceRefresh=false] - Önbelleği atlayıp atlamayacağı.
  */
 async function loadAllFeedsContent(forceRefresh = false) {
-    activeFeed = { id: 'all-feeds', name: 'Tümü' };
+    activeFeed = { id: 'all-feeds', name: i18n.translate('all') };
     dom.rssWidgetContainer.classList.remove('hidden');
     dom.rssRefreshBtn.classList.remove('hidden');
-    dom.rssContent.innerHTML = 'Yükleniyor...';
-    dom.rssTitle.textContent = 'Tüm Akışlar';
+    dom.rssContent.innerHTML = i18n.translate('loading_content');
+    dom.rssTitle.textContent = i18n.translate('all_feeds');
 
     // Bir akışın başarısız olması diğerlerini engellemesin diye her birini
     // ayrı ayrı yakalıyoruz.
     const feedPromises = feeds.map(feed =>
         fetchAndParseRss(feed.url, forceRefresh).catch(error => {
-            console.error(`'${feed.name}' akışı yüklenemedi:`, error);
+            console.error(i18n.translate('feed_load_error', { feedName: feed.name }), error);
             return null; // Başarısız olanlar için null döndür.
         })
     );
@@ -135,12 +136,12 @@ async function loadAllFeedsContent(forceRefresh = false) {
         allItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
 
         const combinedData = {
-            title: 'Tüm Akışlar',
+            title: i18n.translate('all_feeds'),
             items: allItems.slice(0, 50) // Birleşik akışta en fazla 50 öğe göster.
         };
         renderContent(combinedData);
     } catch (error) {
-        console.error("Tüm akışlar yüklenirken hata oluştu:", error);
+        console.error(i18n.translate('all_feeds_load_error'), error);
         renderContent(null, error.message);
     }
 }
@@ -158,7 +159,7 @@ async function loadFeedContent(feed, forceRefresh = false) {
     activeFeed = feed;
     dom.rssWidgetContainer.classList.remove('hidden');
     dom.rssRefreshBtn.classList.remove('hidden');
-    dom.rssContent.innerHTML = 'Yükleniyor...';
+    dom.rssContent.innerHTML = i18n.translate('loading_content');
     dom.rssTitle.textContent = feed.name;
 
     try {
@@ -179,7 +180,7 @@ function renderTabs() {
     if (feeds.length > 1) {
         const allTab = document.createElement('div');
         allTab.className = 'rss-tab all-tab'; // Sürüklenmemesi için özel class
-        allTab.textContent = 'Tümü';
+        allTab.textContent = i18n.translate('all');
         allTab.dataset.id = 'all-feeds';
         if (activeFeed && activeFeed.id === 'all-feeds') {
             allTab.classList.add('active');
@@ -251,7 +252,7 @@ export function initializeRss() {
     const lastActiveId = localStorage.getItem('activeRssFeedId');
     
     if (lastActiveId === 'all-feeds' && feeds.length > 1) {
-        activeFeed = { id: 'all-feeds', name: 'Tümü' };
+        activeFeed = { id: 'all-feeds', name: i18n.translate('all') };
     } else {
         activeFeed = feeds.find(f => f.id === lastActiveId) || feeds[0];
         // Eğer son aktif sekme silinmişse, ilk sekmeye dön ve bunu kaydet.

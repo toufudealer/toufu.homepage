@@ -82,3 +82,4 @@ export const editLinkForm = document.getElementById('edit-link-form');
 export const editLinkIdInput = document.getElementById('edit-link-id');
 export const editLinkNameInput = document.getElementById('edit-link-name-input');
 export const editLinkUrlInput = document.getElementById('edit-link-url-input');
+export const languageSelect = document.getElementById('language-select');

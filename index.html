@@ -30,8 +30,8 @@
         <!-- Arama Bölümü -->
         <div id="search-container">
             <form id="search-form">
-                <input type="text" id="search-input" placeholder="Arama yap..." autocomplete="off" autofocus>
-                <button type="submit">Ara</button>
+                <input type="text" id="search-input" placeholder="Arama yap..." autocomplete="off" autofocus data-i18n-key="search_placeholder">
+                <button type="submit" data-i18n-key="search_button">Ara</button>
             </form>
             <div id="autocomplete-suggestions"></div>
         </div>
@@ -50,7 +50,7 @@
             <div id="rss-tabs"></div>
             <button id="rss-refresh-btn" class="hidden" title="Yenile">↻</button>
         </div>
-        <h2 id="rss-title"></h2>
+        <h2 id="rss-title" data-i18n-key="rss_feed_title"></h2>
         <div id="rss-content"></div>
     </div>
 
@@ -58,11 +58,11 @@
     <div id="add-link-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
-            <h2>Yeni Hızlı Bağlantı</h2>
+            <h2 data-i18n-key="add_new_link_title">Yeni Hızlı Bağlantı</h2>
             <form id="add-link-form">
-                <input type="text" id="link-name-input" placeholder="Site Adı (isteğe bağlı)" autocomplete="off">
-                <input type="text" id="link-url-input" placeholder="URL (örn: youtube.com)" required autocomplete="off">
-                <button type="submit">Kaydet</button>
+                <input type="text" id="link-name-input" placeholder="Site Adı (isteğe bağlı)" autocomplete="off" data-i18n-key="site_name_placeholder">
+                <input type="text" id="link-url-input" placeholder="URL (örn: youtube.com)" required autocomplete="off" data-i18n-key="link_url_placeholder">
+                <button type="submit" data-i18n-key="save_button">Kaydet</button>
             </form>
         </div>
     </div>
@@ -70,8 +70,8 @@
     <!-- Custom Context Menu (Gizli) -->
     <div id="context-menu" class="context-menu">
         <ul>
-            <li id="context-menu-edit">Düzenle</li>
-            <li id="context-menu-delete" class="danger-action">Sil</li>
+            <li id="context-menu-edit" data-i18n-key="edit">Düzenle</li>
+            <li id="context-menu-delete" class="danger-action" data-i18n-key="delete">Sil</li>
         </ul>
     </div>
 
@@ -79,12 +79,12 @@
     <div id="edit-link-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
-            <h2>Hızlı Bağlantıyı Düzenle</h2>
+            <h2 data-i18n-key="edit_link_title">Hızlı Bağlantıyı Düzenle</h2>
             <form id="edit-link-form">
                 <input type="hidden" id="edit-link-id">
-                <input type="text" id="edit-link-name-input" placeholder="Site Adı" required autocomplete="off">
-                <input type="text" id="edit-link-url-input" placeholder="URL" required autocomplete="off">
-                <button type="submit">Kaydet</button>
+                <input type="text" id="edit-link-name-input" placeholder="Site Adı" required autocomplete="off" data-i18n-key="site_name_placeholder_required">
+                <input type="text" id="edit-link-url-input" placeholder="URL" required autocomplete="off" data-i18n-key="link_url_placeholder_required">
+                <button type="submit" data-i18n-key="save_button">Kaydet</button>
             </form>
         </div>
     </div>
@@ -95,216 +95,224 @@
     <!-- Ayarlar Paneli (Gizli) -->
     <div id="settings-panel" class="panel">
         <div class="panel-header">
-            <h2>Ayarlar</h2>
+            <h2 data-i18n-key="settings_title">Ayarlar</h2>
             <span id="close-settings-btn" class="close-btn">&times;</span>
         </div>
         <div class="panel-content">
             <div class="settings-form">
-                <label>Tema</label>
+                <label data-i18n-key="theme">Tema</label>
                 <div class="theme-switcher">
-                    <span>Koyu</span>
+                    <span data-i18n-key="dark">Koyu</span>
                     <label class="switch">
                         <input type="checkbox" id="theme-toggle">
                         <span class="slider round"></span>
                     </label>
-                    <span>Açık</span>
+                    <span data-i18n-key="light">Açık</span>
                 </div>
             </div>
 
             <hr class="settings-divider">
 
+            <div class="settings-form">
+                <label for="language-select" data-i18n-key="language">Dil / Language</label>
+                <select id="language-select">
+                </select>
+            </div>
+
+            <hr class="settings-divider">
+
             <form id="location-form" class="settings-form">
-                <label for="country-select">Ülke</label>
+                <label for="country-select" data-i18n-key="country">Ülke</label>
                 <select id="country-select"></select>
-                <label for="location-input">Şehir / İlçe</label>
-                <input type="text" id="location-input" placeholder="örn: Ankara veya Çankaya">
-                <small>Hava durumu için konum girmeniz gereklidir.</small>
-                <button type="submit">Kaydet</button>
+                <label for="location-input" data-i18n-key="city_district">Şehir / İlçe</label>
+                <input type="text" id="location-input" placeholder="örn: Ankara veya Çankaya" data-i18n-key="location_placeholder">
+                <small data-i18n-key="location_required_message">Hava durumu için konum girmeniz gereklidir.</small>
+                <button type="submit" data-i18n-key="save_button">Kaydet</button>
             </form>
 
             <hr class="settings-divider">
 
             <div class="settings-form">
-                <label for="search-engine-select">Arama Motoru</label>
+                <label for="search-engine-select" data-i18n-key="search_engine">Arama Motoru</label>
                 <select id="search-engine-select"></select>
             </div>
 
             <hr class="settings-divider">
 
             <div class="settings-form">
-                <label for="user-name-input">İsminiz</label>
-                <input type="text" id="user-name-input" placeholder="Selamlama için isminizi girin...">
+                <label for="user-name-input" data-i18n-key="your_name">İsminiz</label>
+                <input type="text" id="user-name-input" placeholder="Selamlama için isminizi girin..." data-i18n-key="your_name_placeholder">
             </div>
 
             <hr class="settings-divider">
 
             <div class="settings-form">
-                <label>RSS Akışları</label>
+                <label data-i18n-key="rss_feeds">RSS Akışları</label>
                 <div id="rss-feeds-list">
                     <!-- Kayıtlı RSS akışları buraya gelecek -->
                 </div>
                 <form id="add-rss-feed-form" class="sub-form">
-                    <input type="text" id="rss-name-input" placeholder="Akış Adı (isteğe bağlı)">
-                    <input type="url" id="rss-url-input" placeholder="Akış URL'si" required>
+                    <input type="text" id="rss-name-input" placeholder="Akış Adı (isteğe bağlı)" data-i18n-key="feed_name_placeholder">
+                    <input type="url" id="rss-url-input" placeholder="Akış URL'si" required data-i18n-key="feed_url_placeholder">
                     <button type="submit">+</button>
                 </form>
-                <small>En az bir akış eklendiğinde widget görünür.</small>
+                <small data-i18n-key="widget_visible_message">En az bir akış eklendiğinde widget görünür.</small>
             </div>
 
             <div class="settings-form">
-                <label for="bulk-rss-input">Toplu RSS Ekle (Her Satıra Bir URL)</label>
-                <textarea id="bulk-rss-input" rows="5" placeholder="https://site1.com/rss.xml&#10;https://site2.com/feed"></textarea>
-                <button type="button" id="bulk-add-rss-btn">Toplu Ekle</button>
+                <label for="bulk-rss-input" data-i18n-key="bulk_add_rss">Toplu RSS Ekle (Her Satıra Bir URL)</label>
+                <textarea id="bulk-rss-input" rows="5" placeholder="https://site1.com/rss.xml&#10;https://site2.com/feed" data-i18n-key="bulk_add_rss_placeholder"></textarea>
+                <button type="button" id="bulk-add-rss-btn" data-i18n-key="bulk_add_button">Toplu Ekle</button>
             </div>
 
-            <button type="button" id="clear-rss-feeds-btn" class="danger-btn">Tüm RSS Akışlarını Temizle</button>
+            <button type="button" id="clear-rss-feeds-btn" class="danger-btn" data-i18n-key="clear_all_rss_button">Tüm RSS Akışlarını Temizle</button>
 
             <hr class="settings-divider">
 
             <form id="background-form" class="settings-form">
-                <label for="background-source-select">Arka Plan Kaynağı</label>
+                <label for="background-source-select" data-i18n-key="background_source">Arka Plan Kaynağı</label>
                 <select id="background-source-select">
-                    <option value="none">Varsayılan Renk</option>
-                    <option value="url">URL</option>
-                    <option value="bing">Bing Günün Resmi</option>
-                    <option value="custom">Kendi Resimlerim</option>
+                    <option value="none" data-i18n-key="default_color">Varsayılan Renk</option>
+                    <option value="url" data-i18n-key="url_option">URL</option>
+                    <option value="bing" data-i18n-key="bing_daily_image">Bing Günün Resmi</option>
+                    <option value="custom" data-i18n-key="my_images">Kendi Resimlerim</option>
                 </select>
 
                 <div id="background-url-group" class="hidden">
-                    <label for="background-url-input">Resim URL'si</label>
-                    <input type="text" id="background-url-input" placeholder="https://.../image.jpg">
+                    <label for="background-url-input" data-i18n-key="image_url">Resim URL'si</label>
+                    <input type="text" id="background-url-input" placeholder="https://.../image.jpg" data-i18n-key="image_url_placeholder">
                 </div>
 
                 <div id="background-custom-group" class="hidden">
-                    <label for="background-custom-input" class="custom-file-upload">
+                    <label for="background-custom-input" class="custom-file-upload" data-i18n-key="select_image">
                         Resim Seç...
                     </label>
                     <input type="file" id="background-custom-input" multiple accept="image/*">
                     <div id="custom-images-preview"></div>
-                    <button type="button" id="clear-custom-images-btn">Tümünü Temizle</button>
+                    <button type="button" id="clear-custom-images-btn" data-i18n-key="clear_all_button">Tümünü Temizle</button>
                 </div>
 
-                <button type="submit">Kaydet</button>
+                <button type="submit" data-i18n-key="save_button">Kaydet</button>
             </form>
 
             <hr class="settings-divider">
 
             <div class="settings-form">
-                <label>Görsel Efektler</label>
+                <label data-i18n-key="visual_effects">Görsel Efektler</label>
                 <div class="widget-toggle">
-                    <span>Hava Durumu Efektleri (Yağmur/Kar)</span>
+                    <span data-i18n-key="weather_effects">Hava Durumu Efektleri (Yağmur/Kar)</span>
                     <label class="switch">
                         <input type="checkbox" id="weather-effects-toggle">
                         <span class="slider round"></span>
                     </label>
                 </div>
-                <small>Hava durumuna göre yağmur veya kar animasyonunu aç/kapat.</small>
+                <small data-i18n-key="weather_effects_description">Hava durumuna göre yağmur veya kar animasyonunu aç/kapat.</small>
 
                 <div class="debug-control" style="margin-top: 15px;">
-                    <label for="debug-weather-effect-select" style="font-size: 0.9rem; color: var(--text-color-secondary);">Efekti Test Et</label>
+                    <label for="debug-weather-effect-select" style="font-size: 0.9rem; color: var(--text-color-secondary);" data-i18n-key="test_effect">Efekti Test Et</label>
                     <select id="debug-weather-effect-select">
-                        <option value="auto">Otomatik (Hava Durumuna Göre)</option>
-                        <option value="rain">Yağmur Efektini Zorla</option>
-                        <option value="thunderstorm">Fırtına Efektini Zorla</option>
-                        <option value="snow">Kar Efektini Zorla</option>
-                        <option value="none">Efekti Kapat</option>
+                        <option value="auto" data-i18n-key="auto_effect">Otomatik (Hava Durumuna Göre)</option>
+                        <option value="rain" data-i18n-key="force_rain_effect">Yağmur Efektini Zorla</option>
+                        <option value="thunderstorm" data-i18n-key="force_thunderstorm_effect">Fırtına Efektini Zorla</option>
+                        <option value="snow" data-i18n-key="force_snow_effect">Kar Efektini Zorla</option>
+                        <option value="none" data-i18n-key="disable_effect">Efekti Kapat</option>
                     </select>
-                    <small>Bu ayar, hava durumu ne olursa olsun seçili efekti zorla çalıştırır.</small>
+                    <small data-i18n-key="test_effect_description">Bu ayar, hava durumu ne olursa olsun seçili efekti zorla çalıştırır.</small>
                 </div>
             </div>
 
             <hr class="settings-divider">
 
             <div class="settings-form">
-                <label>Widget'ları Yönet</label>
+                <label data-i18n-key="manage_widgets">Widget'ları Yönet</label>
                 <div id="widget-manager">
                     <!-- Örnek Widget Toggle -->
                     <div class="widget-toggle">
-                        <span>Selamlama & Arama</span>
+                        <span data-i18n-key="greeting_search">Selamlama & Arama</span>
                         <label class="switch">
                             <input type="checkbox" data-widget-id="greeting" checked disabled>
                             <span class="slider round"></span>
                         </label>
                     </div>
                     <div class="widget-toggle">
-                        <span>Hızlı Bağlantılar</span>
+                        <span data-i18n-key="quick_links">Hızlı Bağlantılar</span>
                         <label class="switch">
                             <input type="checkbox" data-widget-id="quicklinks" checked>
                             <span class="slider round"></span>
                         </label>
                     </div>
                     <div class="widget-toggle">
-                        <span>Saat</span>
+                        <span data-i18n-key="clock">Saat</span>
                         <label class="switch">
                             <input type="checkbox" data-widget-id="clock" checked>
                             <span class="slider round"></span>
                         </label>
                     </div>
                     <div class="widget-toggle">
-                        <span>Hava Durumu</span>
+                        <span data-i18n-key="weather">Hava Durumu</span>
                         <label class="switch">
                             <input type="checkbox" data-widget-id="weather" checked>
                             <span class="slider round"></span>
                         </label>
                     </div>
                     <div class="widget-toggle">
-                        <span>RSS Akışı</span>
+                        <span data-i18n-key="rss_feed">RSS Akışı</span>
                         <label class="switch">
                             <input type="checkbox" data-widget-id="rss" checked>
                             <span class="slider round"></span>
                         </label>
                     </div>
                 </div>
-                <small>Göstermek istediğiniz widget'ları seçin.</small>
+                <small data-i18n-key="select_widgets_message">Göstermek istediğiniz widget'ları seçin.</small>
             </div>
 
             <hr class="settings-divider">
 
             <div class="settings-form">
-                <label>Özel Widget'lar</label>
+                <label data-i18n-key="custom_widgets">Özel Widget'lar</label>
                 <div id="custom-widgets-list">
                     <!-- Kayıtlı özel widget'lar buraya gelecek -->
                 </div>
                 <form id="add-custom-widget-form" class="sub-form">
-                    <input type="text" id="custom-widget-name-input" placeholder="Widget Adı" required>
-                    <input type="url" id="custom-widget-url-input" placeholder="Widget URL'si (iframe)" required>
+                    <input type="text" id="custom-widget-name-input" placeholder="Widget Adı" required data-i18n-key="widget_name_placeholder">
+                    <input type="url" id="custom-widget-url-input" placeholder="Widget URL'si (iframe)" required data-i18n-key="widget_url_placeholder">
                     <button type="submit">+</button>
                 </form>
-                <small>URL'si verilen sayfa bir iframe içinde gösterilecektir. Bazı siteler buna izin vermeyebilir.</small>
-                <small><b>Not:</b> Bu özellik henüz test aşamasındadır ve hatalar içerebilir.</small>
+                <small data-i18n-key="iframe_embed_message">URL'si verilen sayfa bir iframe içinde gösterilecektir. Bazı siteler buna izin vermeyebilir.</small>
+                <small><b data-i18n-key="beta_feature_note">Not:</b> Bu özellik henüz test aşamasındadır ve hatalar içerebilir.</small>
             </div>
 
             <hr class="settings-divider">
 
             <div class="settings-form">
-                <label for="theme-select">Özel Temalar</label>
+                <label for="theme-select" data-i18n-key="custom_themes">Özel Temalar</label>
                 <div class="theme-management-controls">
                     <select id="theme-select">
-                        <option value="">Varsayılan Tema</option>
+                        <option value="" data-i18n-key="default_theme">Varsayılan Tema</option>
                         <!-- Yüklenen temalar buraya gelecek -->
                     </select>
-                    <button type="button" id="import-theme-btn" title="Yeni Tema(lar) İçe Aktar (.css)">+</button>
+                    <button type="button" id="import-theme-btn" data-i18n-title-key="import_themes_button_title" data-i18n-key="import_themes_button">+</button>
                 </div>
-                <textarea id="custom-css-input" rows="8" readonly placeholder="Seçili temanın içeriği burada görünür..."></textarea>
+                <textarea id="custom-css-input" rows="8" readonly placeholder="Seçili temanın içeriği burada görünür..." data-i18n-key="theme_content_placeholder"></textarea>
                 <div class="settings-io-buttons">
-                    <button type="button" id="delete-theme-btn" class="danger-btn">Seçili Temayı Sil</button>
-                    <button type="button" id="set-active-theme-btn">Aktif Tema Yap</button>
+                    <button type="button" id="delete-theme-btn" class="danger-btn" data-i18n-key="delete_theme_button">Seçili Temayı Sil</button>
+                    <button type="button" id="set-active-theme-btn" data-i18n-key="set_active_theme_button">Aktif Tema Yap</button>
                 </div>
-                <small><b>Not:</b> Temaları içe/dışa aktarma özelliği ile paylaşabilirsiniz.</small>
+                <small><b data-i18n-key="theme_import_export_note">Not:</b> Temaları içe/dışa aktarma özelliği ile paylaşabilirsiniz.</small>
             </div>
 
             <div class="settings-form">
-                <label>Ayarları Yönet</label>
+                <label data-i18n-key="manage_settings">Ayarları Yönet</label>
                 <div class="settings-io-buttons">
-                    <button type="button" id="import-settings-btn">İçe Aktar (JSON)</button>
-                    <button type="button" id="export-settings-btn">Dışa Aktar (JSON)</button>
+                    <button type="button" id="import-settings-btn" data-i18n-key="import_settings_button">İçe Aktar (JSON)</button>
+                    <button type="button" id="export-settings-btn" data-i18n-key="export_settings_button">Dışa Aktar (JSON)</button>
                 </div>
-                <small>Tüm tema ve widget ayarlarınızı bir dosyaya kaydedin veya başkasınınkini yükleyin.</small>
+                <small data-i18n-key="import_export_settings_note">Tüm tema ve widget ayarlarınızı bir dosyaya kaydedin veya başkasınınkini yükleyin.</small>
             </div>
 
             <hr class="settings-divider">
 
-            <button id="reset-all-settings-btn" class="danger-btn">Tüm Ayarları Sıfırla</button>
+            <button id="reset-all-settings-btn" class="danger-btn" data-i18n-key="reset_all_settings_button">Tüm Ayarları Sıfırla</button>
         </div>
         
         <!-- Ayarları ve temaları içe aktarmak için gizli dosya girişleri -->
@@ -316,7 +324,7 @@
     <div id="weather-modal" class="modal">
         <div class="modal-content">
             <div class="panel-header">
-                <h2 id="weather-modal-city">Hava Durumu Tahmini</h2>
+                <h2 id="weather-modal-city" data-i18n-key="weather_forecast_title">Hava Durumu Tahmini</h2>
                 <span id="close-weather-modal-btn" class="close-btn">&times;</span>
             </div>
             <div id="weather-forecast-details">

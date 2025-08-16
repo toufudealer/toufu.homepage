@@ -698,9 +698,9 @@ h1 {
 
 .theme-management-controls button {
     flex-shrink: 0;
-    width: 40px;
+    /* width: 40px; */ /* Genişliği içeriğe göre ayarlanacak şekilde kaldırıldı */
     margin-top: 0;
-    padding: 8px;
+    padding: 8px 12px; /* İçeriğe daha iyi uyum için padding ayarlandı */
 }
 
 #custom-css-input:read-only {

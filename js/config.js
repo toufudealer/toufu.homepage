@@ -1,10 +1,12 @@
 // Arama Motorları
 export const searchEngines = {
-  google: { name: 'Google', url: 'https://www.google.com/search?q=', placeholder: "Google'da ara..." },
-  duckduckgo: { name: 'DuckDuckGo', url: 'https://duckduckgo.com/?q=', placeholder: "DuckDuckGo'da ara..." },
-  bing: { name: 'Bing', url: 'https://www.bing.com/search?q=', placeholder: "Bing'de ara..." },
-  yandex: { name: 'Yandex', url: 'https://yandex.com.tr/search/?text=', placeholder: "Yandex'te ara..." }
+  google: { name: 'Google', url: 'https://www.google.com/search?q=', placeholder: "search_google_placeholder" },
+  duckduckgo: { name: 'DuckDuckGo', url: 'https://duckduckgo.com/?q=', placeholder: "search_duckduckgo_placeholder" },
+  bing: { name: 'Bing', url: 'https://www.bing.com/search?q=', placeholder: "search_bing_placeholder" },
+  yandex: { name: 'Yandex', url: 'https://yandex.com.tr/search/?text=', placeholder: "search_yandex_placeholder" }
 };
+
+export const supportedLanguages = ['tr', 'en', 'de', 'jp'];
 
 // Ülke listesi
 export const countries = {

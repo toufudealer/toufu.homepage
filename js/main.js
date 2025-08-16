@@ -9,6 +9,7 @@ import * as theme from './theme.js';
 import * as settingsManager from './settingsManager.js';
 import * as weatherEffects from './weatherEffects.js';
 import { debounce, generateId } from './utils.js';
+import { translate, initialize, setLanguage } from './i18n.js';
 
 // --- Core Logic / "Controller" Functions ---
 
@@ -21,7 +22,7 @@ async function performSearch(query) {
 }
 
 async function loadWeather() {
-    dom.weatherContainer.textContent = 'Yükleniyor...';
+    dom.weatherContainer.textContent = translate('loading');
     const data = await api.fetchWeather();
     if (data.error) {
         dom.weatherContainer.textContent = data.error;
@@ -127,7 +128,7 @@ function addEventListeners() {
     dom.contextMenuDelete.addEventListener('click', () => {
         const linkId = dom.contextMenu.dataset.linkId;
         if (linkId) {
-            if (confirm('Bu bağlantıyı silmek istediğinizden emin misiniz?')) {
+            if (confirm(translate('delete_link_confirmation'))) {
                 ui.deleteLink(linkId);
             }
             ui.hideContextMenu();
@@ -179,7 +180,7 @@ function addEventListeners() {
 
     // Tüm RSS akışlarını temizleme
     dom.clearRssFeedsBtn.addEventListener('click', () => {
-        if (confirm('Tüm RSS akışlarını silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.')) {
+        if (confirm(translate('clear_all_rss_confirmation'))) {
             storage.saveRssFeeds([]); // Depolamadan temizle
             ui.renderRssFeedsList(); // Ayarlar panelindeki listeyi güncelle
             rss.initializeRss(); // Ana RSS widget'ını gizle/güncelle
@@ -215,6 +216,10 @@ function addEventListeners() {
     dom.searchEngineSelect.addEventListener('change', () => {
         localStorage.setItem('searchEngine', dom.searchEngineSelect.value);
         ui.updateSearchPlaceholder();
+    });
+
+    dom.languageSelect.addEventListener('change', (e) => {
+        setLanguage(e.target.value);
     });
 
     dom.userNameInput.addEventListener('input', () => {
@@ -260,15 +265,15 @@ function addEventListeners() {
     });
 
     dom.resetAllSettingsBtn.addEventListener('click', async () => {
-        const isConfirmed = confirm('Tüm ayarları sıfırlamak ve sayfayı yeniden başlatmak istediğinizden emin misiniz? Bu işlem geri alınamaz.');
+        const isConfirmed = confirm(translate('reset_all_settings_confirmation'));
 
         if (isConfirmed) {
             try {
                 await storage.clearAllStorage();
-                alert('Tüm ayarlar başarıyla sıfırlandı. Sayfa şimdi yeniden yüklenecek.');
+                alert(translate('reset_all_settings_success'));
                 location.reload();
             } catch (error) {
-                alert('Ayarlar sıfırlanırken bir hata oluştu. Lütfen konsolu kontrol edin.');
+                alert(translate('reset_all_settings_error'));
                 console.error('Sıfırlama hatası:', error);
             }
         }
@@ -338,11 +343,24 @@ function addEventListeners() {
     document.addEventListener('themeChanged', () => {
         loadWeather();
     });
+
+    document.addEventListener('languageChanged', () => {
+        ui.updateGreeting();
+        ui.updateSearchPlaceholder();
+        ui.renderLinks();
+        ui.renderRssFeedsList();
+        ui.renderCustomWidgetsListInSettings();
+        ui.renderCustomWidgetsOnPage();
+        loadWeather();
+        ui.initializeSettingsUI();
+    });
 }
 
 // --- App Initialization ---
 
-function initializeApp() {
+async function initializeApp() {
+    await initialize(); // Initialize translations first
+
     ui.updateClock();
     setInterval(ui.updateClock, 1000);
 

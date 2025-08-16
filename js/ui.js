@@ -4,6 +4,7 @@ import * as api from './api.js';
 import * as config from './config.js';
 import * as rss from './rss.js';
 import { generateId } from './utils.js';
+import { translate, getLanguage } from './i18n.js';
 
 // --- UI State ---
 let links = [];
@@ -43,11 +44,11 @@ function getWeatherIcon(code) {
 }
 
 function getDayName(dateString, index) {
-    if (index === 0) return "Bugün";
-    if (index === 1) return "Yarın";
+    if (index === 0) return translate('today');
+    if (index === 1) return translate('tomorrow');
     const date = new Date(dateString);
     const options = { weekday: 'long' };
-    return new Intl.DateTimeFormat('tr-TR', options).format(date);
+    return new Intl.DateTimeFormat(getLanguage(), options).format(date);
 }
 
 async function loadAndSetFavicon(imgElement, linkUrl) {
@@ -142,7 +143,7 @@ export function renderRssFeedsList() {
 
         const deleteBtn = document.createElement('button');
         deleteBtn.innerHTML = '&times;'; // Use HTML entity for '×'
-        deleteBtn.title = 'Bu akışı sil';
+        deleteBtn.title = translate('delete_this_feed');
         deleteBtn.addEventListener('click', (e) => {
             // Onay kutusu kaldırıldı, direkt silme işlemi yapılıyor.
             e.stopPropagation(); // Panelin kapanmasını engellemek için olayın yayılmasını durdur.
@@ -182,16 +183,16 @@ export function updateGreeting() {
     const hour = new Date().getHours();
     const name = (localStorage.getItem('userName') || '').trim();
     let greetingText;
-    if (hour >= 5 && hour < 12) greetingText = "Günaydın";
-    else if (hour >= 12 && hour < 18) greetingText = "İyi günler";
-    else if (hour >= 18 && hour < 22) greetingText = "İyi akşamlar";
-    else greetingText = "İyi geceler";
+    if (hour >= 5 && hour < 12) greetingText = translate('good_morning');
+    else if (hour >= 12 && hour < 18) greetingText = translate('good_afternoon');
+    else if (hour >= 18 && hour < 22) greetingText = translate('good_evening');
+    else greetingText = translate('good_night');
     dom.greetingElement.textContent = name ? `${greetingText}, ${name}!` : `${greetingText}!`;
 }
 
 export function updateSearchPlaceholder() {
     const selectedEngineKey = localStorage.getItem('searchEngine') || 'google';
-    dom.searchInput.placeholder = config.searchEngines[selectedEngineKey].placeholder;
+    dom.searchInput.placeholder = translate(config.searchEngines[selectedEngineKey].placeholder);
 }
 
 export async function applyBackground() {
@@ -233,7 +234,7 @@ export async function renderCustomImagePreview() {
         deleteBtn.className = 'delete-img-btn';
         deleteBtn.textContent = '×';
         deleteBtn.type = 'button'; // Butonun formu göndermesini engellemek için bu satır eklendi.
-        deleteBtn.title = 'Bu resmi sil';        
+        deleteBtn.title = translate('delete_this_image');        
         deleteBtn.addEventListener('click', async (e) => {
             e.stopPropagation(); // Panelin kapanmasını engellemek için olayın yayılmasını durdur.
             await storage.deleteCustomImage(imgObject.key);
@@ -248,7 +249,7 @@ export async function renderCustomImagePreview() {
 }
 
 export async function clearCustomImages() {
-    if (confirm('Tüm yüklenmiş resimleri silmek istediğinizden emin misiniz?')) {
+    if (confirm(translate('delete_all_images_confirmation'))) {
         await storage.clearCustomImagesDB();
         renderCustomImagePreview();
         applyBackground();
@@ -301,7 +302,7 @@ export function renderSuggestions(suggestions, performSearch) {
             const removeBtn = document.createElement('button');
             removeBtn.className = 'remove-suggestion-btn';
             removeBtn.innerHTML = '&times;'; // '×' karakteri
-            removeBtn.title = 'Geçmişten kaldır';
+            removeBtn.title = translate('remove_from_history');
 
             removeBtn.addEventListener('click', async (e) => {
                 e.stopPropagation(); // Öneri öğesinin tıklama olayını engelle
@@ -373,7 +374,7 @@ export function displayWeather(data) {
 export function renderWeatherModal() {
     if (!detailedWeatherData) return;
 
-    dom.weatherModalCity.textContent = `${detailedWeatherData.locationName} Tahmini`;
+    dom.weatherModalCity.textContent = `${detailedWeatherData.locationName} ${translate('forecast_suffix')}`;
     dom.weatherForecastDetails.innerHTML = '';
 
     detailedWeatherData.time.forEach((date, index) => {
@@ -408,7 +409,7 @@ export function renderLinks() {
     // "Ekle" butonunu da fragment'a ekle
     const addLinkWrapper = document.createElement('div');
     addLinkWrapper.className = 'link-box-wrapper add-link-wrapper';
-    addLinkWrapper.innerHTML = `<a href="#" class="link-box add-link-box" title="Yeni bağlantı ekle">+</a>`;
+    addLinkWrapper.innerHTML = `<a href="#" class="link-box add-link-box" title="${translate('add_new_link')}">+</a>`;
     addLinkWrapper.querySelector('.add-link-box').addEventListener('click', (e) => {
         e.preventDefault();
         openModal(dom.modal);
@@ -538,7 +539,7 @@ export function addBulkRssFeeds(urlsText) {
         .filter(url => url.length > 0 && (url.startsWith('http://') || url.startsWith('https://')));
 
     if (urls.length === 0) {
-        alert("Lütfen her satıra bir tane olacak şekilde geçerli URL'ler girin.");
+        alert(translate('invalid_urls_alert'));
         return;
     }
 
@@ -563,7 +564,7 @@ export function addBulkRssFeeds(urlsText) {
 
     renderRssFeedsList();
     rss.initializeRss();
-    alert(`${newFeeds.length} adet yeni RSS akışı başarıyla eklendi.`);
+    alert(translate('rss_feed_added_alert', { count: newFeeds.length }));
 }
 
 export function toggleSettingsPanel() {
@@ -618,6 +619,16 @@ export function initializeSettingsUI() {
         }
     });
     
+    // Dil ayarını yükle
+    dom.languageSelect.innerHTML = ''; // Clear existing options
+    config.supportedLanguages.forEach(langCode => {
+        const option = document.createElement('option');
+        option.value = langCode;
+        option.textContent = translate('lang_' + langCode); // Use translation key
+        dom.languageSelect.appendChild(option);
+    });
+    dom.languageSelect.value = getLanguage();
+
     // Konum ayarlarını yükle
     const savedLocation = storage.getStoredJSON('weatherLocation', null);
     if (savedLocation) {
@@ -663,10 +674,10 @@ export function renderCustomWidgetsListInSettings() {
 
         const deleteBtn = document.createElement('button');
         deleteBtn.innerHTML = '&times;';
-        deleteBtn.title = 'Bu widget\'ı sil';
+        deleteBtn.title = translate('delete_this_widget');
         deleteBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            if (confirm(`'${widget.name}' adlı widget'ı silmek istediğinizden emin misiniz?`)) {
+            if (confirm(translate('delete_widget_confirmation', { widgetName: widget.name }))) {
                 // Bu fonksiyon zaten render fonksiyonlarını tekrar çağıracaktır.
                 deleteCustomWidget(widget.id);
             }

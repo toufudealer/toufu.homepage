@@ -1,2 +1,3 @@
 - Rss Akışı
-- İngilizce
+- İngilizce (yapıldı)
+- i18n (yapıldı)
